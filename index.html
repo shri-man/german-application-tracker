@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>German University Application Tracker</title>
+    <title>UniTrack | German University Application Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -14,27 +14,25 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        'brand-blue': '#0077B6',
-                        'brand-yellow': '#FFC300', // A richer yellow
+                        'brand-yellow': '#FFC300',
                         'brand-red': '#D90429',
-                        'brand-gray': '#F8F9FA',
-                        'dark-blue': '#003B5C',
                         'light-gray': '#F9FAFB',
-                        'text-dark': '#1F2937',
+                        'text-dark': '#111827',
                         'text-light': '#6B7280',
+                        'brand-blue': '#005A87',
                     }
                 }
             }
         }
     </script>
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
         body {
             font-family: 'Inter', sans-serif;
             background-color: #ffffff;
-            color: #1F2937;
+            color: #111827;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         .nav-link {
             position: relative;
@@ -45,9 +43,8 @@
             position: absolute;
             width: 0;
             height: 2px;
-            bottom: -4px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: -6px;
+            left: 0;
             background-color: #FFC300;
             transition: width 0.3s ease;
         }
@@ -56,70 +53,77 @@
             width: 100%;
         }
         .nav-link.nav-active {
-            color: #FFC300;
+            color: #111827;
+            font-weight: 600;
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .modal {
             display: none; position: fixed; z-index: 100;
             left: 0; top: 0; width: 100%; height: 100%;
-            overflow: auto; background-color: rgba(0,0,0,0.5);
-            -webkit-backdrop-filter: blur(4px);
-            backdrop-filter: blur(4px);
+            overflow: auto; background-color: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(8px);
         }
         .modal-content {
-            background-color: #fefefe; margin: 10% auto; padding: 2.5rem;
+            background-color: #ffffff; margin: 10% auto; padding: 2.5rem;
             border: none; width: 90%; max-width: 550px; border-radius: 12px;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
         }
         .loader {
-            border: 5px solid #e2e8f0; border-top: 5px solid #0077B6;
+            border: 5px solid #e2e8f0; border-top: 5px solid #005A87;
             border-radius: 50%; width: 50px; height: 50px;
             animation: spin 1s linear infinite;
             position: fixed; left: 50%; top: 50%;
             transform: translate(-50%, -50%); z-index: 2000;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
         #mainHeader, #mainContent { display: none; }
 
-        /* --- Modern Graphical Styles --- */
-        #hero-section {
-            background-image: url('https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-        }
-        .hero-overlay {
-            background: linear-gradient(to top, rgba(0, 59, 92, 0.8), rgba(0, 59, 92, 0.4));
-        }
-        .gallery-item {
-            overflow: hidden;
-            border-radius: 0.75rem;
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .gallery-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-        }
-        .gallery-item img {
-            width: 100%; height: 100%; object-fit: cover;
-        }
-        .feature-icon {
-            background-color: #0077B61A;
-            color: #0077B6;
-        }
-        /* Fade-in Animation on Scroll */
         .fade-in-section {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
         }
         .fade-in-section.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
+        .btn-primary {
+            @apply w-full px-4 py-3 font-semibold text-white bg-text-dark rounded-md hover:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-text-dark transition-colors;
+        }
+        .btn-secondary {
+             @apply w-full px-4 py-3 font-semibold text-text-dark bg-brand-yellow rounded-md hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-yellow transition-colors;
+        }
+        #mainHeader.scrolled {
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+        }
+        
+        /* --- Parallax Scrolling Styles --- */
+        .parallax-section {
+            height: 100vh;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        .parallax-content {
+            background-color: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 2.5rem;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 1rem;
+        }
+
     </style>
 </head>
 <body class="bg-white text-text-dark">
@@ -127,150 +131,116 @@
     <div id="loadingSpinner" class="loader" style="display: block;"></div>
 
     <!-- Login Page -->
-    <section id="loginPage" class="flex flex-col items-center justify-center min-h-screen bg-light-gray">
-        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
-            <div class="flex justify-center">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#0077B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12v5c0 3 2.5 5 5 5s5-2 5-5v-5"/></svg>
+    <section id="loginPage" class="flex flex-col items-center justify-center min-h-screen bg-light-gray p-4">
+        <div class="w-full max-w-sm p-8 space-y-8 bg-white rounded-xl">
+            <div class="text-center">
+                <h1 class="text-4xl font-black text-text-dark">UniTrack</h1>
+                <p class="mt-2 text-text-light">Your journey, organized.</p>
             </div>
-            <h2 class="text-3xl font-bold text-center text-text-dark">Germany UniTrack</h2>
-            <p class="text-center text-text-light">Your journey to a German university, simplified.</p>
             <form id="authForm" class="space-y-6">
                 <div>
-                    <label for="email" class="text-sm font-medium text-text-light">Email Address</label>
-                    <input id="email" name="email" type="email" autocomplete="email" required class="w-full px-4 py-3 mt-1 bg-light-gray border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
+                    <label for="email" class="sr-only">Email Address</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required placeholder="Email Address" class="w-full px-4 py-3 bg-light-gray border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-brand-yellow transition">
                 </div>
                 <div>
-                    <label for="password" class="text-sm font-medium text-text-light">Password</label>
-                    <input id="password" name="password" type="password" autocomplete="current-password" required class="w-full px-4 py-3 mt-1 bg-light-gray border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
+                    <label for="password" class="sr-only">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required placeholder="Password" class="w-full px-4 py-3 bg-light-gray border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-brand-yellow transition">
                 </div>
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <button type="button" id="loginBtn" class="w-full px-4 py-3 font-semibold text-white bg-brand-blue rounded-md hover:bg-dark-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue transition-colors">Login</button>
-                    <button type="button" id="signupBtn" class="w-full px-4 py-3 font-semibold text-dark-blue bg-brand-yellow rounded-md hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-yellow transition-colors">Sign Up</button>
+                <div class="flex flex-col items-center justify-between gap-4">
+                    <button type="button" id="loginBtn" class="btn-primary">Login</button>
+                    <button type="button" id="signupBtn" class="btn-secondary">Sign Up</button>
                 </div>
             </form>
         </div>
     </section>
 
-    <header id="mainHeader" class="bg-white/70 backdrop-blur-lg shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <header id="mainHeader" class="sticky top-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-6 py-5 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0077B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12v5c0 3 2.5 5 5 5s5-2 5-5v-5"/></svg>
-                <h1 class="text-xl font-bold text-dark-blue">UniTrack</h1>
+                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111827" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12v5c0 3 2.5 5 5 5s5-2 5-5v-5"/></svg>
+                <h1 class="text-xl font-extrabold text-text-dark">UniTrack</h1>
             </div>
-            <nav class="space-x-6 flex items-center">
-                <a href="#home" class="nav-link text-text-dark hover:text-brand-blue px-3 py-2 rounded-md text-sm font-medium" data-tab="home">Home</a>
-                <a href="#applications" class="nav-link text-text-dark hover:text-brand-blue px-3 py-2 rounded-md text-sm font-medium" data-tab="applications">Applications</a>
-                <button id="logoutBtn" class="ml-4 px-4 py-2 text-sm font-semibold text-white bg-brand-red rounded-md hover:bg-red-700 transition-colors">Logout</button>
+            <nav class="space-x-8 hidden md:flex items-center">
+                <a href="#home" class="nav-link text-text-dark hover:text-black font-medium" data-tab="home">Home</a>
+                <a href="#applications" class="nav-link text-text-dark hover:text-black font-medium" data-tab="applications">Applications</a>
             </nav>
+            <button id="logoutBtn" class="px-4 py-2 text-sm font-semibold text-white bg-brand-red rounded-md hover:bg-red-700 transition-colors">Logout</button>
         </div>
     </header>
 
     <main id="mainContent">
         <!-- Home Section -->
         <section id="home" class="tab-content">
-            <!-- Hero Section -->
-            <div id="hero-section" class="relative">
-                <div class="hero-overlay absolute inset-0"></div>
-                <div class="relative container mx-auto px-6 py-28 md:py-40 text-center text-white">
-                    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">Your German Dream Starts Here</h1>
-                    <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto opacity-90">Track your university applications and stay organized on your journey to academic success in Germany.</p>
-                    <button onclick="document.querySelector('a[data-tab=\'applications\']').click()" class="mt-8 px-8 py-3 bg-brand-yellow text-dark-blue font-bold rounded-lg shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition-all duration-300">
-                        Go to My Applications
+            <!-- Parallax Section 1: Hero -->
+            <div class="parallax-section" style="background-image: url('https://images.pexels.com/photos/356066/pexels-photo-356066.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                <div class="parallax-content fade-in-section">
+                    <h1 class="text-4xl md:text-6xl font-black tracking-tighter">Your Path to Germany.</h1>
+                    <p class="mt-4 text-lg md:text-xl max-w-xl mx-auto opacity-90">Stop juggling spreadsheets. Start your journey, perfectly organized.</p>
+                    <button onclick="document.querySelector('a[data-tab=\'applications\']').click()" class="mt-8 px-8 py-3 bg-brand-yellow text-text-dark font-bold rounded-lg shadow-lg hover:bg-yellow-400 transform hover:scale-105 transition-all duration-300">
+                        View My Applications
                     </button>
                 </div>
             </div>
 
-            <!-- Features Section -->
-             <div class="bg-white py-20">
-                <div class="container mx-auto px-6 text-center fade-in-section">
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-text-dark mb-4">An Unforgettable Student Experience</h2>
-                    <p class="text-text-light max-w-2xl mx-auto mb-16">Germany offers world-class education, rich cultural heritage, and vibrant city life.</p>
-                    <div class="grid md:grid-cols-3 gap-12">
-                        <div class="feature-item">
-                            <div class="feature-icon p-4 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-5">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-text-dark">Top Education</h3>
-                            <p class="text-text-light mt-2">Home to some of the world's best universities and research institutions.</p>
-                        </div>
-                        <div class="feature-item">
-                            <div class="feature-icon p-4 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-5">
-                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-text-dark">Stay Organized</h3>
-                            <p class="text-text-light mt-2">Keep track of deadlines, documents, and requirements all in one place.</p>
-                        </div>
-                        <div class="feature-item">
-                             <div class="feature-icon p-4 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-5">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-text-dark">Explore Germany</h3>
-                            <p class="text-text-light mt-2">Your academic journey is also an adventure through a beautiful country.</p>
-                        </div>
-                    </div>
+            <!-- Parallax Section 2: Clarity -->
+            <div class="parallax-section" style="background-image: url('https://images.pexels.com/photos/2089205/pexels-photo-2089205.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                 <div class="parallax-content fade-in-section">
+                    <h2 class="text-3xl md:text-5xl font-black tracking-tighter">Clarity in Every Step.</h2>
+                    <p class="mt-4 text-lg max-w-xl mx-auto opacity-90">Track deadlines with an automated countdown, manage requirements, and update your status in one clean interface. It's the clarity you need to succeed.</p>
                 </div>
             </div>
 
-            <!-- Gallery Section -->
-            <div class="bg-light-gray py-20">
-                <div class="container mx-auto px-6 fade-in-section">
-                     <h2 class="text-3xl md:text-4xl font-extrabold text-text-dark text-center mb-12">A Glimpse of Germany</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div class="gallery-item row-span-2">
-                            <img src="https://images.unsplash.com/photo-1593224673934-10f3c05c6d34?q=80&w=1974&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/400x800/eeeeee/cccccc?text=Image+Not+Found';" alt="Heidelberg Old Town" class="h-full">
-                        </div>
-                        <div class="gallery-item">
-                            <img src="https://images.unsplash.com/photo-1559537442-78a05a5a1f33?q=80&w=2070&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/600x400/eeeeee/cccccc?text=Image+Not+Found';" alt="Berlin TV Tower">
-                        </div>
-                         <div class="gallery-item">
-                            <img src="https://images.unsplash.com/photo-1562075727-b64952d4310d?q=80&w=1964&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/600x400/eeeeee/cccccc?text=Image+Not+Found';" alt="Bavarian Alps">
-                        </div>
-                        <div class="gallery-item row-span-2">
-                            <img src="https://images.unsplash.com/photo-1568925577642-3531b7a2c864?q=80&w=1974&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/400x800/eeeeee/cccccc?text=Image+Not+Found';" alt="Modern German University building">
-                        </div>
-                         <div class="gallery-item col-span-2">
-                            <img src="https://images.unsplash.com/photo-1524293581273-79261483a827?q=80&w=2070&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/1200x400/eeeeee/cccccc?text=Image+Not+Found';" alt="Neuschwanstein Castle">
-                        </div>
-                        <div class="gallery-item">
-                            <img src="https://images.unsplash.com/photo-1601902186937-2396b27e53f6?q=80&w=1974&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/600x400/eeeeee/cccccc?text=Image+Not+Found';" alt="Hamburg Speicherstadt">
-                        </div>
-                        <div class="gallery-item">
-                            <img src="https://images.unsplash.com/photo-1604580864964-b17454f767b9?q=80&w=1974&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/600x400/eeeeee/cccccc?text=Image+Not+Found';" alt="Rhine River">
-                        </div>
-                    </div>
+             <!-- Parallax Section 3: The Goal -->
+            <div class="parallax-section" style="background-image: url('https://images.pexels.com/photos/208803/pexels-photo-208803.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                 <div class="parallax-content fade-in-section">
+                    <h2 class="text-3xl md:text-5xl font-black tracking-tighter">Achieve Your Dreams.</h2>
+                    <p class="mt-4 text-lg max-w-xl mx-auto opacity-90">From historic castles to modern cities, your academic adventure in a beautiful country awaits. Let's get you there.</p>
+                </div>
+            </div>
+            
+             <!-- Final Call to Action Section -->
+             <div class="bg-white py-24">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-4xl font-black text-text-dark tracking-tighter">Ready to Begin?</h2>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-text-light">Take control of your applications today.</p>
+                    <button onclick="document.querySelector('a[data-tab=\'applications\']').click()" class="mt-8 px-8 py-4 bg-black text-white font-bold rounded-lg shadow-lg hover:bg-gray-800 transform hover:scale-105 transition-all duration-300">
+                        Go to My Dashboard
+                    </button>
                 </div>
             </div>
         </section>
 
         <!-- Applications Section -->
-        <section id="applications" class="tab-content bg-light-gray min-h-screen py-16">
+        <section id="applications" class="tab-content bg-white min-h-screen py-24">
             <div class="container mx-auto px-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10">
                     <div>
-                        <h2 class="text-3xl md:text-4xl font-extrabold text-text-dark">My Applications</h2>
-                        <p class="text-text-light mt-1">Logged in as <span class="userEmailDisplay font-semibold text-brand-blue"></span></p>
+                        <h2 class="text-4xl md:text-5xl font-black text-text-dark tracking-tighter">My Applications</h2>
+                        <p class="text-text-light mt-2">Logged in as <span class="userEmailDisplay font-semibold text-brand-blue"></span></p>
                     </div>
-                    <button id="addApplicationBtn" class="bg-brand-blue text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-dark-blue transition-colors duration-300 flex items-center space-x-2 mt-4 sm:mt-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                    <button id="addApplicationBtn" class="bg-black text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-300 flex items-center space-x-2 mt-6 sm:mt-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                         <span>Add Application</span>
                     </button>
                 </div>
-                <div class="bg-white shadow-xl rounded-xl overflow-x-auto">
+                <div class="bg-white rounded-xl overflow-x-auto">
                     <table class="min-w-full">
-                        <thead class="bg-gray-50">
+                        <thead class="border-b border-gray-200">
                             <tr>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">University Name</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Course</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">University & Course</th>
                                 <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Status</th>
                                 <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Due Date</th>
-                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Days Remaining</th>
+                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Countdown</th>
                                 <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Requirements</th>
-                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Actions</th>
+                                <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-text-light uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="applicationsTableBody" class="divide-y divide-gray-200">
+                        <tbody id="applicationsTableBody" class="divide-y divide-gray-100">
                              <tr id="noApplicationsRow">
-                                <td colspan="7" class="px-6 py-12 text-center text-text-light">No applications added yet. Click "Add Application" to start.</td>
+                                <td colspan="6" class="px-6 py-16 text-center text-text-light">
+                                    <p class="font-semibold text-lg">Your dashboard is empty.</p>
+                                    <p class="mt-1">Click "Add Application" to get started.</p>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -282,42 +252,42 @@
     <!-- Modals -->
     <div id="applicationModal" class="modal">
         <div class="modal-content">
-            <div class="flex justify-between items-center mb-6">
+             <div class="flex justify-between items-center mb-6">
                 <h3 id="modalTitle" class="text-2xl font-bold text-text-dark">Add New Application</h3>
                 <button id="closeModalBtn" class="text-gray-400 hover:text-red-500 transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
             </div>
-            <form id="applicationForm">
+            <form id="applicationForm" class="space-y-4">
                 <input type="hidden" id="applicationId">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                    <div>
-                        <label for="uniName" class="block text-sm font-medium text-text-light mb-1">University Name</label>
-                        <input type="text" id="uniName" name="uniName" required class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
-                    </div>
-                     <div>
-                        <label for="courseAppliedFor" class="block text-sm font-medium text-text-light mb-1">Course Applied For</label>
-                        <input type="text" id="courseAppliedFor" name="courseAppliedFor" class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition" placeholder="e.g., M.Sc. Informatics">
-                    </div>
+                <div>
+                    <label for="uniName" class="block text-sm font-medium text-text-light mb-1">University Name</label>
+                    <input type="text" id="uniName" name="uniName" required class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition">
+                </div>
+                 <div>
+                    <label for="courseAppliedFor" class="block text-sm font-medium text-text-light mb-1">Course Applied For</label>
+                    <input type="text" id="courseAppliedFor" name="courseAppliedFor" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition" placeholder="e.g., M.Sc. Informatics">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                      <div>
                         <label for="status" class="block text-sm font-medium text-text-light mb-1">Application Status</label>
-                        <select id="status" name="status" class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
+                        <select id="status" name="status" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition">
                             <option>Preparing</option><option>Not Applied</option><option>Applied</option>
                             <option>Accepted</option><option>Rejected</option><option>Waitlisted</option>
                         </select>
                     </div>
                     <div>
                         <label for="dueDate" class="block text-sm font-medium text-text-light mb-1">Due Date</label>
-                        <input type="date" id="dueDate" name="dueDate" class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
+                        <input type="date" id="dueDate" name="dueDate" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition">
                     </div>
                 </div>
-                <div class="mt-4">
+                <div>
                     <label for="requirements" class="block text-sm font-medium text-text-light mb-1">Special Requirements</label>
-                    <textarea id="requirements" name="requirements" rows="3" class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition" placeholder="e.g., APS certificate, Language proficiency..."></textarea>
+                    <textarea id="requirements" name="requirements" rows="3" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition" placeholder="e.g., APS certificate, Language proficiency..."></textarea>
                 </div>
                 <div class="mt-6 flex justify-end space-x-3">
                     <button type="button" id="cancelModalBtn" class="px-5 py-2 text-sm font-semibold text-text-light bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">Cancel</button>
-                    <button type="submit" id="saveApplicationBtn" class="px-5 py-2 text-sm font-semibold text-white bg-brand-blue rounded-md hover:bg-dark-blue transition-colors">Save Application</button>
+                    <button type="submit" id="saveApplicationBtn" class="px-5 py-2 text-sm font-semibold text-white bg-text-dark rounded-md hover:bg-black transition-colors">Save Application</button>
                 </div>
             </form>
         </div>
@@ -336,7 +306,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-auth.js";
-        import { getFirestore, doc, collection, addDoc, setDoc, deleteDoc, onSnapshot, query, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-firestore.js";
+        import { getFirestore, doc, collection, addDoc, setDoc, deleteDoc, onSnapshot, query, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDmAlSmn_dvqJ93HJTVQcsf09Iihrj8DxM",
@@ -458,21 +428,19 @@
             if (unsubscribeApplications) unsubscribeApplications();
             
             showLoading();
-            const q = query(applicationsCollectionRef);
+            const q = query(applicationsCollectionRef, orderBy("dueDate", "asc"));
             unsubscribeApplications = onSnapshot(q, (querySnapshot) => {
                 const applications = [];
                 querySnapshot.forEach((doc) => applications.push({ id: doc.id, ...doc.data() }));
-                applications.sort((a, b) => {
-                    const dateA = a.dueDate ? new Date(a.dueDate) : 0;
-                    const dateB = b.dueDate ? new Date(b.dueDate) : 0;
-                    if (!dateA) return 1; if (!dateB) return -1;
-                    return dateA - dateB;
-                });
                 renderApplications(applications);
                 hideLoading();
             }, (error) => {
                 console.error("Firestore snapshot error: ", error);
-                alertUser(`Error fetching data: ${error.message}`, "error");
+                if (error.code === 'failed-precondition') {
+                     alertUser("Missing Firestore index. Please create a composite index for 'dueDate' in your Firebase console.", "error");
+                } else {
+                    alertUser(`Error fetching data: ${error.message}`, "error");
+                }
                 hideLoading();
             });
         }
@@ -550,16 +518,16 @@
         }
 
         function getDaysRemaining(dueDateString) {
-             if (!dueDateString) return { text: 'N/A', colorClass: 'text-gray-500' };
+             if (!dueDateString) return { text: 'N/A', colorClass: 'text-text-light' };
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             const dateParts = dueDateString.split('-').map(part => parseInt(part, 10));
             const dueDate = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
-            if (isNaN(dueDate.getTime())) return { text: 'Invalid Date', colorClass: 'text-gray-500' };
+            if (isNaN(dueDate.getTime())) return { text: 'Invalid Date', colorClass: 'text-text-light' };
             const diffTime = dueDate.getTime() - today.getTime();
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             if (diffDays < 0) return { text: `${Math.abs(diffDays)} days overdue`, colorClass: 'text-red-600 font-semibold' };
-            if (diffDays === 0) return { text: 'Due today', colorClass: 'text-red-500 font-semibold' };
+            if (diffDays === 0) return { text: 'Due today', colorClass: 'text-orange-500 font-semibold' };
             if (diffDays <= 7) return { text: `${diffDays} days`, colorClass: 'text-yellow-600 font-semibold' };
             return { text: `${diffDays} days`, colorClass: 'text-green-600' };
         }
@@ -571,19 +539,32 @@
                  applications.forEach((app, index) => {
                     const row = applicationsTableBody.insertRow();
                     row.className = index % 2 === 0 ? 'bg-white' : 'bg-light-gray';
-                    row.insertCell().textContent = app.uniName || 'N/A';
-                    row.insertCell().textContent = app.courseAppliedFor || 'N/A';
-                    row.insertCell().textContent = app.status || 'N/A';
-                    const dueDate = app.dueDate ? new Date(app.dueDate + 'T00:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A';
-                    row.insertCell().textContent = dueDate;
-                    const daysRemainingCell = row.insertCell();
-                    daysRemainingCell.classList.add('px-4', 'py-4', 'whitespace-nowrap', 'text-sm');
+                    
+                    const cellName = row.insertCell();
+                    cellName.className = 'px-6 py-4 whitespace-nowrap text-sm font-semibold text-text-dark';
+                    cellName.innerHTML = `<div class="font-bold">${app.uniName || 'N/A'}</div><div class="text-text-light">${app.courseAppliedFor || ''}</div>`;
+
+                    const cellStatus = row.insertCell();
+                    cellStatus.className = 'px-6 py-4 whitespace-nowrap text-sm text-text-light';
+                    cellStatus.textContent = app.status || 'N/A';
+
+                    const cellDueDate = row.insertCell();
+                    cellDueDate.className = 'px-6 py-4 whitespace-nowrap text-sm text-text-light';
+                    cellDueDate.textContent = app.dueDate ? new Date(app.dueDate + 'T00:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A';
+                    
+                    const cellCountdown = row.insertCell();
+                    cellCountdown.className = 'px-4 py-4 whitespace-nowrap text-sm';
                     if (['Not Applied', 'Preparing'].includes(app.status)) {
                         const { text, colorClass } = getDaysRemaining(app.dueDate);
-                        daysRemainingCell.textContent = text;
-                        daysRemainingCell.className += ` ${colorClass}`;
-                    } else { daysRemainingCell.textContent = '—'; }
-                    row.insertCell().textContent = app.requirements || 'N/A';
+                        cellCountdown.textContent = text;
+                        cellCountdown.className += ` ${colorClass}`;
+                    } else { cellCountdown.textContent = '—'; }
+
+                    const cellReq = row.insertCell();
+                    cellReq.className = 'px-6 py-4 text-sm text-text-light max-w-xs truncate';
+                    cellReq.textContent = app.requirements || 'N/A';
+                    cellReq.title = app.requirements || '';
+
                     const actionsCell = row.insertCell();
                     actionsCell.classList.add('px-6', 'py-4', 'text-right', 'text-sm', 'font-medium', 'space-x-4');
                     const editButton = document.createElement('button');
@@ -623,6 +604,15 @@
 
         document.querySelectorAll('.fade-in-section').forEach(section => {
             observer.observe(section);
+        });
+        
+        // --- Header Scroll Effect ---
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                mainHeader.classList.add('scrolled');
+            } else {
+                mainHeader.classList.remove('scrolled');
+            }
         });
 
         // --- Initial Event Listeners ---
