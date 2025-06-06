@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>German University Application Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -15,37 +15,65 @@
                     },
                     colors: {
                         'brand-blue': '#0077B6',
-                        'brand-yellow': '#FFD700',
+                        'brand-yellow': '#FFC300', // A richer yellow
                         'brand-red': '#D90429',
                         'brand-gray': '#F8F9FA',
+                        'dark-blue': '#003B5C',
+                        'light-gray': '#F9FAFB',
+                        'text-dark': '#1F2937',
+                        'text-light': '#6B7280',
                     }
                 }
             }
         }
     </script>
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            background-color: #ffffff;
+            color: #1F2937;
         }
-        .nav-active {
-            border-bottom: 2px solid #FFD700;
-            color: #FFD700;
-            font-weight: 600;
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FFC300;
+            transition: width 0.3s ease;
+        }
+        .nav-link.nav-active::after,
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .nav-link.nav-active {
+            color: #FFC300;
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .modal {
             display: none; position: fixed; z-index: 100;
             left: 0; top: 0; width: 100%; height: 100%;
-            overflow: auto; background-color: rgba(0,0,0,0.4);
+            overflow: auto; background-color: rgba(0,0,0,0.5);
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
         }
         .modal-content {
-            background-color: #fefefe; margin: 10% auto; padding: 20px;
-            border: 1px solid #888; width: 80%; max-width: 550px; border-radius: 8px;
+            background-color: #fefefe; margin: 10% auto; padding: 2.5rem;
+            border: none; width: 90%; max-width: 550px; border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
         }
         .loader {
-            border: 5px solid #f3f3f3; border-top: 5px solid #3498db;
+            border: 5px solid #e2e8f0; border-top: 5px solid #0077B6;
             border-radius: 50%; width: 50px; height: 50px;
             animation: spin 1s linear infinite;
             position: fixed; left: 50%; top: 50%;
@@ -55,160 +83,253 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Hide sections by default */
         #mainHeader, #mainContent { display: none; }
+
+        /* --- Modern Graphical Styles --- */
+        #hero-section {
+            background-image: url('https://images.unsplash.com/photo-1528728329032-2972f65dfb3f?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-overlay {
+            background: linear-gradient(to top, rgba(0, 59, 92, 0.8), rgba(0, 59, 92, 0.4));
+        }
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 0.75rem;
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .feature-icon {
+            background-color: #0077B61A;
+            color: #0077B6;
+        }
+        /* Fade-in Animation on Scroll */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
-<body class="bg-brand-gray text-gray-800">
+<body class="bg-white text-text-dark">
 
     <div id="loadingSpinner" class="loader" style="display: block;"></div>
 
     <!-- Login Page -->
-    <section id="loginPage" class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
+    <section id="loginPage" class="flex flex-col items-center justify-center min-h-screen bg-light-gray">
+        <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
             <div class="flex justify-center">
                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#0077B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12v5c0 3 2.5 5 5 5s5-2 5-5v-5"/></svg>
             </div>
-            <h2 class="text-2xl font-bold text-center text-gray-800">Welcome to Germany UniTrack</h2>
-            <p class="text-sm text-center text-gray-600">Sign in or create an account to track your applications.</p>
+            <h2 class="text-3xl font-bold text-center text-text-dark">Germany UniTrack</h2>
+            <p class="text-center text-text-light">Your journey to a German university, simplified.</p>
             <form id="authForm" class="space-y-6">
                 <div>
-                    <label for="email" class="text-sm font-medium text-gray-700">Email Address</label>
-                    <input id="email" name="email" type="email" autocomplete="email" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue">
+                    <label for="email" class="text-sm font-medium text-text-light">Email Address</label>
+                    <input id="email" name="email" type="email" autocomplete="email" required class="w-full px-4 py-3 mt-1 bg-light-gray border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
                 </div>
                 <div>
-                    <label for="password" class="text-sm font-medium text-gray-700">Password</label>
-                    <input id="password" name="password" type="password" autocomplete="current-password" required class="w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue">
+                    <label for="password" class="text-sm font-medium text-text-light">Password</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required class="w-full px-4 py-3 mt-1 bg-light-gray border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
                 </div>
-                <div class="flex items-center justify-between space-x-4">
-                    <button type="button" id="loginBtn" class="w-full px-4 py-2 font-semibold text-white bg-brand-blue rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue">Login</button>
-                    <button type="button" id="signupBtn" class="w-full px-4 py-2 font-semibold text-brand-blue bg-yellow-400 rounded-md hover:bg-brand-yellow focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-yellow">Sign Up</button>
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <button type="button" id="loginBtn" class="w-full px-4 py-3 font-semibold text-white bg-brand-blue rounded-md hover:bg-dark-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue transition-colors">Login</button>
+                    <button type="button" id="signupBtn" class="w-full px-4 py-3 font-semibold text-dark-blue bg-brand-yellow rounded-md hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-yellow transition-colors">Sign Up</button>
                 </div>
             </form>
         </div>
     </section>
 
-    <header id="mainHeader" class="bg-brand-blue shadow-md sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-3 flex flex-wrap justify-between items-center">
-            <div class="flex items-center space-x-2 mb-2 md:mb-0">
-                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12v5c0 3 2.5 5 5 5s5-2 5-5v-5"/></svg>
-                <h1 class="text-2xl font-bold text-white">Germany UniTrack</h1>
+    <header id="mainHeader" class="bg-white/70 backdrop-blur-lg shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0077B6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12v5c0 3 2.5 5 5 5s5-2 5-5v-5"/></svg>
+                <h1 class="text-xl font-bold text-dark-blue">UniTrack</h1>
             </div>
-            <nav class="space-x-4 flex items-center">
-                <a href="#home" class="nav-link text-gray-200 hover:text-brand-yellow px-3 py-2 rounded-md text-sm font-medium" data-tab="home">Home</a>
-                <a href="#applications" class="nav-link text-gray-200 hover:text-brand-yellow px-3 py-2 rounded-md text-sm font-medium" data-tab="applications">Applications</a>
-                <button id="logoutBtn" class="px-4 py-2 text-sm font-semibold text-white bg-brand-red rounded-md hover:bg-red-700">Logout</button>
+            <nav class="space-x-6 flex items-center">
+                <a href="#home" class="nav-link text-text-dark hover:text-brand-blue px-3 py-2 rounded-md text-sm font-medium" data-tab="home">Home</a>
+                <a href="#applications" class="nav-link text-text-dark hover:text-brand-blue px-3 py-2 rounded-md text-sm font-medium" data-tab="applications">Applications</a>
+                <button id="logoutBtn" class="ml-4 px-4 py-2 text-sm font-semibold text-white bg-brand-red rounded-md hover:bg-red-700 transition-colors">Logout</button>
             </nav>
         </div>
     </header>
 
-    <main id="mainContent" class="container mx-auto px-6 py-8">
+    <main id="mainContent">
         <!-- Home Section -->
         <section id="home" class="tab-content">
-             <div class="text-center mb-6">
-                <h2 class="text-4xl font-bold text-brand-blue mb-2">Welcome Back!</h2>
-                <p class="text-lg text-gray-600">You're logged in as <span id="userEmailDisplay" class="font-semibold text-brand-blue"></span>.</p>
+            <!-- Hero Section -->
+            <div id="hero-section" class="relative">
+                <div class="hero-overlay absolute inset-0"></div>
+                <div class="relative container mx-auto px-6 py-28 md:py-40 text-center text-white">
+                    <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">Your German Dream Starts Here</h1>
+                    <p class="mt-4 text-lg md:text-xl max-w-3xl mx-auto opacity-90">Track your university applications and stay organized on your journey to academic success in Germany.</p>
+                    <button onclick="document.querySelector('a[data-tab=\'applications\']').click()" class="mt-8 px-8 py-3 bg-brand-yellow text-dark-blue font-bold rounded-lg shadow-lg hover:bg-yellow-300 transform hover:scale-105 transition-all duration-300">
+                        Go to My Applications
+                    </button>
+                </div>
             </div>
-            <div class="grid md:grid-cols-3 gap-8 mb-12">
-                 <div class="rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://placehold.co/600x400/0077B6/FFFFFF?text=Brandenburg+Gate" alt="Scenic Germany 1 - Brandenburg Gate Placeholder" class="w-full h-64 object-cover">
-                    <div class="p-4 bg-white"><h3 class="font-semibold text-lg text-brand-blue">Iconic Landmarks</h3><p class="text-sm text-gray-600">Imagine exploring historic sites.</p></div>
+
+            <!-- Features Section -->
+             <div class="bg-white py-20">
+                <div class="container mx-auto px-6 text-center fade-in-section">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-text-dark mb-4">An Unforgettable Student Experience</h2>
+                    <p class="text-text-light max-w-2xl mx-auto mb-16">Germany offers world-class education, rich cultural heritage, and vibrant city life.</p>
+                    <div class="grid md:grid-cols-3 gap-12">
+                        <div class="feature-item">
+                            <div class="feature-icon p-4 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-text-dark">Top Education</h3>
+                            <p class="text-text-light mt-2">Home to some of the world's best universities and research institutions.</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon p-4 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-5">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-text-dark">Stay Organized</h3>
+                            <p class="text-text-light mt-2">Keep track of deadlines, documents, and requirements all in one place.</p>
+                        </div>
+                        <div class="feature-item">
+                             <div class="feature-icon p-4 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-5">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-text-dark">Explore Germany</h3>
+                            <p class="text-text-light mt-2">Your academic journey is also an adventure through a beautiful country.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://placehold.co/600x400/2A9D8F/FFFFFF?text=Neuschwanstein" alt="Scenic Germany 2 - Neuschwanstein Castle Placeholder" class="w-full h-64 object-cover">
-                    <div class="p-4 bg-white"><h3 class="font-semibold text-lg text-brand-blue">Breathtaking Landscapes</h3><p class="text-sm text-gray-600">From fairytale castles to serene nature.</p></div>
-                </div>
-                <div class="rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
-                    <img src="https://placehold.co/600x400/E9C46A/333333?text=University+City" alt="Scenic Germany 3 - University City Placeholder" class="w-full h-64 object-cover">
-                    <div class="p-4 bg-white"><h3 class="font-semibold text-lg text-brand-blue">Vibrant Student Life</h3><p class="text-sm text-gray-600">World-class education awaits.</p></div>
+            </div>
+
+            <!-- Gallery Section -->
+            <div class="bg-light-gray py-20">
+                <div class="container mx-auto px-6 fade-in-section">
+                     <h2 class="text-3xl md:text-4xl font-extrabold text-text-dark text-center mb-12">A Glimpse of Germany</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="gallery-item row-span-2">
+                            <img src="https://images.unsplash.com/photo-1593224673934-10f3c05c6d34?q=80&w=1974&auto=format&fit=crop" alt="Heidelberg Old Town" class="h-full">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1559537442-78a05a5a1f33?q=80&w=2070&auto=format&fit=crop" alt="Berlin TV Tower">
+                        </div>
+                         <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1562075727-b64952d4310d?q=80&w=1964&auto=format&fit=crop" alt="Bavarian Alps">
+                        </div>
+                        <div class="gallery-item row-span-2">
+                            <img src="https://images.unsplash.com/photo-1568925577642-3531b7a2c864?q=80&w=1974&auto=format&fit=crop" alt="Modern German University building">
+                        </div>
+                         <div class="gallery-item col-span-2">
+                            <img src="https://images.unsplash.com/photo-1524293581273-79261483a827?q=80&w=2070&auto=format&fit=crop" alt="Neuschwanstein Castle">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1601902186937-2396b27e53f6?q=80&w=1974&auto=format&fit=crop" alt="Hamburg Speicherstadt">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1604580864964-b17454f767b9?q=80&w=1974&auto=format&fit=crop" alt="Rhine River">
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Applications Section -->
-        <section id="applications" class="tab-content">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-3xl font-bold text-brand-blue">My University Applications</h2>
-                <button id="addApplicationBtn" class="bg-brand-blue text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                    <span>Add Application</span>
-                </button>
-            </div>
-            <div class="bg-white shadow-xl rounded-lg overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">University Name</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Course Applied For</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Status</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Due Date</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Days Remaining</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Special Requirements</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="applicationsTableBody" class="bg-white divide-y divide-gray-200">
-                         <tr id="noApplicationsRow">
-                            <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">No applications added yet. Click "Add Application" to start.</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <section id="applications" class="tab-content bg-light-gray min-h-screen py-16">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+                    <div>
+                        <h2 class="text-3xl md:text-4xl font-extrabold text-text-dark">My Applications</h2>
+                        <p class="text-text-light mt-1">Logged in as <span class="userEmailDisplay font-semibold text-brand-blue"></span></p>
+                    </div>
+                    <button id="addApplicationBtn" class="bg-brand-blue text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-dark-blue transition-colors duration-300 flex items-center space-x-2 mt-4 sm:mt-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                        <span>Add Application</span>
+                    </button>
+                </div>
+                <div class="bg-white shadow-xl rounded-xl overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">University Name</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Course</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Due Date</th>
+                                <th scope="col" class="px-4 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Days Remaining</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Requirements</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicationsTableBody" class="divide-y divide-gray-200">
+                             <tr id="noApplicationsRow">
+                                <td colspan="7" class="px-6 py-12 text-center text-text-light">No applications added yet. Click "Add Application" to start.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
     
     <!-- Modals -->
     <div id="applicationModal" class="modal">
-        <div class="modal-content bg-white p-6 rounded-lg shadow-xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="modalTitle" class="text-2xl font-semibold text-brand-blue">Add New Application</h3>
-                <button id="closeModalBtn" class="text-gray-500 hover:text-red-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="modalTitle" class="text-2xl font-bold text-text-dark">Add New Application</h3>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
             </div>
             <form id="applicationForm">
                 <input type="hidden" id="applicationId">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="mb-2">
-                        <label for="uniName" class="block text-sm font-medium text-gray-700 mb-1">University Name</label>
-                        <input type="text" id="uniName" name="uniName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue sm:text-sm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    <div>
+                        <label for="uniName" class="block text-sm font-medium text-text-light mb-1">University Name</label>
+                        <input type="text" id="uniName" name="uniName" required class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
                     </div>
-                     <div class="mb-2">
-                        <label for="courseAppliedFor" class="block text-sm font-medium text-gray-700 mb-1">Course Applied For</label>
-                        <input type="text" id="courseAppliedFor" name="courseAppliedFor" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue sm:text-sm" placeholder="e.g., M.Sc. Computer Science">
+                     <div>
+                        <label for="courseAppliedFor" class="block text-sm font-medium text-text-light mb-1">Course Applied For</label>
+                        <input type="text" id="courseAppliedFor" name="courseAppliedFor" class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition" placeholder="e.g., M.Sc. Informatics">
                     </div>
-                     <div class="mb-2">
-                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Application Status</label>
-                        <select id="status" name="status" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue sm:text-sm">
-                            <option value="Preparing">Preparing</option>
-                            <option value="Not Applied">Not Applied</option>
-                            <option value="Applied">Applied</option>
-                            <option value="Accepted">Accepted</option>
-                            <option value="Rejected">Rejected</option>
-                            <option value="Waitlisted">Waitlisted</option>
+                     <div>
+                        <label for="status" class="block text-sm font-medium text-text-light mb-1">Application Status</label>
+                        <select id="status" name="status" class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
+                            <option>Preparing</option><option>Not Applied</option><option>Applied</option>
+                            <option>Accepted</option><option>Rejected</option><option>Waitlisted</option>
                         </select>
                     </div>
-                    <div class="mb-2">
-                        <label for="dueDate" class="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-                        <input type="date" id="dueDate" name="dueDate" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue sm:text-sm">
+                    <div>
+                        <label for="dueDate" class="block text-sm font-medium text-text-light mb-1">Due Date</label>
+                        <input type="date" id="dueDate" name="dueDate" class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition">
                     </div>
                 </div>
                 <div class="mt-4">
-                    <label for="requirements" class="block text-sm font-medium text-gray-700 mb-1">Special Requirements</label>
-                    <textarea id="requirements" name="requirements" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-brand-blue focus:border-brand-blue sm:text-sm" placeholder="e.g., APS certificate, Language proficiency proof..."></textarea>
+                    <label for="requirements" class="block text-sm font-medium text-text-light mb-1">Special Requirements</label>
+                    <textarea id="requirements" name="requirements" rows="3" class="w-full px-4 py-2 bg-light-gray border-gray-200 rounded-md focus:ring-2 focus:ring-brand-blue focus:border-transparent transition" placeholder="e.g., APS certificate, Language proficiency..."></textarea>
                 </div>
                 <div class="mt-6 flex justify-end space-x-3">
-                    <button type="button" id="cancelModalBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">Cancel</button>
-                    <button type="submit" id="saveApplicationBtn" class="px-4 py-2 text-sm font-medium text-white bg-brand-blue rounded-md hover:bg-blue-700">Save</button>
+                    <button type="button" id="cancelModalBtn" class="px-5 py-2 text-sm font-semibold text-text-light bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">Cancel</button>
+                    <button type="submit" id="saveApplicationBtn" class="px-5 py-2 text-sm font-semibold text-white bg-brand-blue rounded-md hover:bg-dark-blue transition-colors">Save Application</button>
                 </div>
             </form>
         </div>
     </div>
     <div id="confirmModal" class="modal">
-        <div class="modal-content bg-white p-6 rounded-lg shadow-xl max-w-sm">
-            <h3 id="confirmModalTitle" class="text-xl font-semibold text-brand-blue mb-4">Confirm Action</h3>
-            <p id="confirmModalMessage" class="text-gray-700 mb-6">Are you sure?</p>
-            <div class="flex justify-end space-x-3"><button id="confirmCancelBtn" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300">Cancel</button><button id="confirmOkBtn" class="px-4 py-2 text-sm font-medium text-white bg-brand-red rounded-md hover:bg-red-700">Confirm</button></div>
+        <div class="modal-content max-w-sm">
+            <h3 id="confirmModalTitle" class="text-xl font-bold text-text-dark mb-4">Confirm Action</h3>
+            <p id="confirmModalMessage" class="text-text-light mb-6">Are you sure?</p>
+            <div class="flex justify-end space-x-3">
+                <button id="confirmCancelBtn" class="px-5 py-2 text-sm font-semibold text-text-light bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">Cancel</button>
+                <button id="confirmOkBtn" class="px-5 py-2 text-sm font-semibold text-white bg-brand-red rounded-md hover:bg-red-700 transition-colors">Confirm</button>
+            </div>
         </div>
     </div>
 
@@ -217,7 +338,6 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-auth.js";
         import { getFirestore, doc, collection, addDoc, setDoc, deleteDoc, onSnapshot, query, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-firestore.js";
 
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDmAlSmn_dvqJ93HJTVQcsf09Iihrj8DxM",
             authDomain: "my-uni-tracker.firebaseapp.com",
@@ -232,17 +352,14 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        setLogLevel('debug');
-
+        
         let currentUserId = null;
         let applicationsCollectionRef;
         let unsubscribeApplications = null;
 
-        // UI Elements
         const loginPage = document.getElementById('loginPage');
         const mainHeader = document.getElementById('mainHeader');
         const mainContent = document.getElementById('mainContent');
-        const userEmailDisplay = document.getElementById('userEmailDisplay');
         const loginBtn = document.getElementById('loginBtn');
         const signupBtn = document.getElementById('signupBtn');
         const logoutBtn = document.getElementById('logoutBtn');
@@ -265,7 +382,6 @@
         const confirmOkBtn = document.getElementById('confirmOkBtn');
         let confirmCallback = null;
 
-        // --- App State Management ---
         function showLoginPage() {
             loginPage.style.display = 'flex';
             mainHeader.style.display = 'none';
@@ -277,18 +393,17 @@
             loginPage.style.display = 'none';
             mainHeader.style.display = 'block';
             mainContent.style.display = 'block';
-            userEmailDisplay.textContent = user.email;
+            document.querySelectorAll('.userEmailDisplay').forEach(el => {
+                el.textContent = user.email;
+            });
             handleInitialTab();
         }
 
-        // --- Auth Logic ---
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                console.log("User is signed in:", user.uid);
                 showAppPage(user);
                 initializeData(user);
             } else {
-                console.log("User is signed out.");
                 if (unsubscribeApplications) unsubscribeApplications();
                 showLoginPage();
             }
@@ -297,16 +412,13 @@
         signupBtn.addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            if (!email || !password) {
-                alertUser("Please enter email and password.", "error");
-                return;
-            }
+            if (!email || !password) return alertUser("Please enter email and password.", "error");
             showLoading();
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
-                // onAuthStateChanged will handle the rest
             } catch (error) {
                 alertUser(getAuthErrorMessage(error.code), "error");
+            } finally {
                 hideLoading();
             }
         });
@@ -314,45 +426,32 @@
         loginBtn.addEventListener('click', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            if (!email || !password) {
-                alertUser("Please enter email and password.", "error");
-                return;
-            }
+            if (!email || !password) return alertUser("Please enter email and password.", "error");
             showLoading();
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                 // onAuthStateChanged will handle the rest
             } catch (error) {
                 alertUser(getAuthErrorMessage(error.code), "error");
+            } finally {
                 hideLoading();
             }
         });
         
-        logoutBtn.addEventListener('click', async () => {
-             await signOut(auth);
-             // onAuthStateChanged will handle showing the login page
-        });
+        logoutBtn.addEventListener('click', () => signOut(auth));
 
         function getAuthErrorMessage(errorCode) {
             switch (errorCode) {
-                case 'auth/invalid-email':
-                    return 'Please enter a valid email address.';
+                case 'auth/invalid-email': return 'Please enter a valid email address.';
                 case 'auth/user-not-found':
-                case 'auth/wrong-password':
-                    return 'Invalid email or password.';
-                case 'auth/email-already-in-use':
-                    return 'An account with this email already exists.';
-                case 'auth/weak-password':
-                    return 'Password should be at least 6 characters long.';
-                default:
-                    return 'An authentication error occurred. Please try again.';
+                case 'auth/wrong-password': return 'Invalid email or password.';
+                case 'auth/email-already-in-use': return 'An account with this email already exists.';
+                case 'auth/weak-password': return 'Password should be at least 6 characters long.';
+                default: return 'An authentication error occurred. Please try again.';
             }
         }
 
-        // --- Firestore Logic ---
         async function initializeData(user) {
             currentUserId = user.uid;
-            // Correct path for private user data
             const userApplicationsPath = `artifacts/${appId}/users/${currentUserId}/applications`;
             applicationsCollectionRef = collection(db, userApplicationsPath);
             
@@ -366,8 +465,7 @@
                 applications.sort((a, b) => {
                     const dateA = a.dueDate ? new Date(a.dueDate) : 0;
                     const dateB = b.dueDate ? new Date(b.dueDate) : 0;
-                    if (!dateA) return 1;
-                    if (!dateB) return -1;
+                    if (!dateA) return 1; if (!dateB) return -1;
                     return dateA - dateB;
                 });
                 renderApplications(applications);
@@ -379,24 +477,21 @@
             });
         }
         
-        // --- Other functions (modal, rendering, etc.) ---
         function navigateToTab(tabName) {
-            // Update URL hash
-            if (window.location.hash !== `#${tabName}`) {
-                 window.location.hash = tabName;
-            }
-           
-            // Update active states for links and content
-            navLinks.forEach(link => {
-                link.classList.toggle('nav-active', link.dataset.tab === tabName);
-            });
-            tabContents.forEach(content => {
-                content.classList.toggle('active', content.id === tabName);
-            });
+            if (window.location.hash !== `#${tabName}`) window.location.hash = tabName;
+            navLinks.forEach(link => link.classList.toggle('nav-active', link.dataset.tab === tabName));
+            tabContents.forEach(content => content.classList.toggle('active', content.id === tabName));
         };
-        function handleInitialTab() { navigateToTab(window.location.hash.substring(1) || 'home'); }
+
+        function handleInitialTab() {
+            const tabName = window.location.hash.substring(1) || 'home';
+            navigateToTab(tabName);
+            navLinks.forEach(link => link.classList.toggle('nav-active', link.dataset.tab === tabName));
+        }
+
         function showLoading() { loadingSpinner.style.display = 'block'; }
         function hideLoading() { loadingSpinner.style.display = 'none'; }
+
         function openModal(appData = null) {
             applicationForm.reset();
             applicationIdInput.value = '';
@@ -411,10 +506,12 @@
             }
             applicationModal.style.display = 'block';
         }
+
         function closeModal() { applicationModal.style.display = 'none'; }
+
         applicationForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (!currentUserId) { alertUser("You must be logged in.", "error"); return; }
+            if (!currentUserId) return alertUser("You must be logged in.", "error");
             showLoading();
             const id = applicationIdInput.value;
             const applicationData = {
@@ -426,9 +523,8 @@
                 updatedAt: serverTimestamp()
             };
             try {
-                if (id) {
-                    await setDoc(doc(applicationsCollectionRef, id), applicationData, { merge: true });
-                } else {
+                if (id) await setDoc(doc(applicationsCollectionRef, id), applicationData, { merge: true });
+                else {
                     applicationData.createdAt = serverTimestamp();
                     await addDoc(applicationsCollectionRef, applicationData);
                 }
@@ -440,6 +536,7 @@
                 hideLoading();
             }
         });
+
         async function deleteApplication(id) {
              openConfirmModal("Delete Application", "Are you sure? This cannot be undone.", async () => {
                 showLoading();
@@ -451,6 +548,7 @@
                 } finally { hideLoading(); }
             });
         }
+
         function getDaysRemaining(dueDateString) {
              if (!dueDateString) return { text: 'N/A', colorClass: 'text-gray-500' };
             const today = new Date();
@@ -459,43 +557,49 @@
             const dueDate = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
             if (isNaN(dueDate.getTime())) return { text: 'Invalid Date', colorClass: 'text-gray-500' };
             const diffTime = dueDate.getTime() - today.getTime();
-            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
             if (diffDays < 0) return { text: `${Math.abs(diffDays)} days overdue`, colorClass: 'text-red-600 font-semibold' };
             if (diffDays === 0) return { text: 'Due today', colorClass: 'text-red-500 font-semibold' };
             if (diffDays <= 7) return { text: `${diffDays} days`, colorClass: 'text-yellow-600 font-semibold' };
             return { text: `${diffDays} days`, colorClass: 'text-green-600' };
         }
+
         function renderApplications(applications) {
             applicationsTableBody.innerHTML = '';
-            noApplicationsRow.style.display = applications.length === 0 ? 'table-row' : 'none';
-            applications.forEach(app => {
-                const row = applicationsTableBody.insertRow();
-                row.insertCell().textContent = app.uniName || 'N/A';
-                row.insertCell().textContent = app.courseAppliedFor || 'N/A';
-                row.insertCell().textContent = app.status || 'N/A';
-                const dueDate = app.dueDate ? new Date(app.dueDate + 'T00:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A';
-                row.insertCell().textContent = dueDate;
-                const daysRemainingCell = row.insertCell();
-                daysRemainingCell.classList.add('px-4', 'py-4', 'whitespace-nowrap', 'text-sm');
-                if (['Not Applied', 'Preparing'].includes(app.status)) {
-                    const { text, colorClass } = getDaysRemaining(app.dueDate);
-                    daysRemainingCell.textContent = text;
-                    daysRemainingCell.classList.add(...colorClass.split(' '));
-                } else { daysRemainingCell.textContent = '—'; }
-                row.insertCell().textContent = app.requirements || 'N/A';
-                const actionsCell = row.insertCell();
-                actionsCell.classList.add('px-6', 'py-4', 'whitespace-nowrap', 'text-sm', 'font-medium', 'space-x-2');
-                const editButton = document.createElement('button');
-                editButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 5-3-3H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2"/><path d="M8 18h1"/><path d="M18.4 9.6a2 2 0 1 1 3 3L17 17l-4 1 1-4Z"/></svg>`;
-                editButton.classList.add('text-indigo-600', 'hover:text-indigo-900', 'p-1');
-                editButton.onclick = () => openModal(app);
-                actionsCell.appendChild(editButton);
-                const deleteButton = document.createElement('button');
-                deleteButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>`;
-                deleteButton.classList.add('text-red-600', 'hover:text-red-900', 'p-1');
-                deleteButton.onclick = () => deleteApplication(app.id);
-                actionsCell.appendChild(deleteButton);
-            });
+            if (applications.length > 0) {
+                 noApplicationsRow.style.display = 'none';
+                 applications.forEach((app, index) => {
+                    const row = applicationsTableBody.insertRow();
+                    row.className = index % 2 === 0 ? 'bg-white' : 'bg-light-gray';
+                    row.insertCell().textContent = app.uniName || 'N/A';
+                    row.insertCell().textContent = app.courseAppliedFor || 'N/A';
+                    row.insertCell().textContent = app.status || 'N/A';
+                    const dueDate = app.dueDate ? new Date(app.dueDate + 'T00:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A';
+                    row.insertCell().textContent = dueDate;
+                    const daysRemainingCell = row.insertCell();
+                    daysRemainingCell.classList.add('px-4', 'py-4', 'whitespace-nowrap', 'text-sm');
+                    if (['Not Applied', 'Preparing'].includes(app.status)) {
+                        const { text, colorClass } = getDaysRemaining(app.dueDate);
+                        daysRemainingCell.textContent = text;
+                        daysRemainingCell.className += ` ${colorClass}`;
+                    } else { daysRemainingCell.textContent = '—'; }
+                    row.insertCell().textContent = app.requirements || 'N/A';
+                    const actionsCell = row.insertCell();
+                    actionsCell.classList.add('px-6', 'py-4', 'text-right', 'text-sm', 'font-medium', 'space-x-4');
+                    const editButton = document.createElement('button');
+                    editButton.innerHTML = `Edit`;
+                    editButton.className = 'text-brand-blue hover:text-dark-blue font-semibold transition-colors';
+                    editButton.onclick = () => openModal(app);
+                    actionsCell.appendChild(editButton);
+                    const deleteButton = document.createElement('button');
+                    deleteButton.innerHTML = `Delete`;
+                    deleteButton.className = 'text-red-600 hover:text-red-800 font-semibold transition-colors';
+                    deleteButton.onclick = () => deleteApplication(app.id);
+                    actionsCell.appendChild(deleteButton);
+                });
+            } else {
+                 noApplicationsRow.style.display = 'table-row';
+            }
         }
         function openConfirmModal(title, message, callback) { confirmModalTitle.textContent = title; confirmModalMessage.textContent = message; confirmCallback = callback; confirmModal.style.display = 'block'; }
         function closeConfirmModal() { confirmModal.style.display = 'none'; confirmCallback = null; }
@@ -505,14 +609,27 @@
             alertBox.textContent = message;
             document.body.appendChild(alertBox);
             setTimeout(() => { alertBox.style.opacity = '1'; alertBox.style.bottom = '30px'; }, 10);
-            setTimeout(() => { alertBox.style.opacity = '0'; setTimeout(() => alertBox.remove(), 300); }, 3000);
+            setTimeout(() => { alertBox.style.opacity = '0'; setTimeout(() => alertBox.remove(), 300); }, 3500);
         }
-        // Initial listeners
+        
+        // --- On-Scroll Animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // --- Initial Event Listeners ---
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const tabName = e.target.dataset.tab;
-                navigateToTab(tabName);
+                navigateToTab(e.target.dataset.tab);
             });
         });
 
