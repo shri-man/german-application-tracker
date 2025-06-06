@@ -95,7 +95,7 @@
                 <h1 class="text-2xl font-bold text-white">Germany UniTrack</h1>
             </div>
             <nav class="space-x-4 flex items-center">
-                <a href="#home" class="nav-link text-gray-200 hover:text-brand-yellow px-3 py-2 rounded-md text-sm font-medium nav-active" data-tab="home">Home</a>
+                <a href="#home" class="nav-link text-gray-200 hover:text-brand-yellow px-3 py-2 rounded-md text-sm font-medium" data-tab="home">Home</a>
                 <a href="#applications" class="nav-link text-gray-200 hover:text-brand-yellow px-3 py-2 rounded-md text-sm font-medium" data-tab="applications">Applications</a>
                 <button id="logoutBtn" class="px-4 py-2 text-sm font-semibold text-white bg-brand-red rounded-md hover:bg-red-700">Logout</button>
             </nav>
@@ -104,7 +104,7 @@
 
     <main id="mainContent" class="container mx-auto px-6 py-8">
         <!-- Home Section -->
-        <section id="home" class="tab-content active">
+        <section id="home" class="tab-content">
              <div class="text-center mb-6">
                 <h2 class="text-4xl font-bold text-brand-blue mb-2">Welcome Back!</h2>
                 <p class="text-lg text-gray-600">You're logged in as <span id="userEmailDisplay" class="font-semibold text-brand-blue"></span>.</p>
@@ -380,10 +380,19 @@
         }
         
         // --- Other functions (modal, rendering, etc.) ---
-        window.navigateToTab = (tabName) => {
-            window.location.hash = tabName;
-            navLinks.forEach(link => link.classList.toggle('nav-active', link.dataset.tab === tabName));
-            tabContents.forEach(content => content.classList.toggle('active', content.id === tabName));
+        function navigateToTab(tabName) {
+            // Update URL hash
+            if (window.location.hash !== `#${tabName}`) {
+                 window.location.hash = tabName;
+            }
+           
+            // Update active states for links and content
+            navLinks.forEach(link => {
+                link.classList.toggle('nav-active', link.dataset.tab === tabName);
+            });
+            tabContents.forEach(content => {
+                content.classList.toggle('active', content.id === tabName);
+            });
         };
         function handleInitialTab() { navigateToTab(window.location.hash.substring(1) || 'home'); }
         function showLoading() { loadingSpinner.style.display = 'block'; }
@@ -499,9 +508,20 @@
             setTimeout(() => { alertBox.style.opacity = '0'; setTimeout(() => alertBox.remove(), 300); }, 3000);
         }
         // Initial listeners
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tabName = e.target.dataset.tab;
+                navigateToTab(tabName);
+            });
+        });
+
         [addApplicationBtn, closeModalBtn, cancelModalBtn].forEach(btn => btn.addEventListener('click', btn.id.includes('add') ? openModal : closeModal));
         confirmCancelBtn.addEventListener('click', closeConfirmModal);
-        confirmOkBtn.addEventListener('click', () => confirmCallback && confirmCallback());
+        confirmOkBtn.addEventListener('click', () => {
+            if(confirmCallback) confirmCallback();
+            closeConfirmModal();
+        });
         window.addEventListener('click', (e) => {
             if (e.target === applicationModal) closeModal();
             if (e.target === confirmModal) closeConfirmModal();
