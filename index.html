@@ -6,6 +6,8 @@
     <title>UniTrack | German University Application Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- SheetJS/xlsx library for Excel export -->
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -218,10 +220,16 @@
                         <h2 class="text-4xl md:text-5xl font-black text-text-dark tracking-tighter">My Applications</h2>
                         <p class="text-text-light mt-2">Logged in as <span class="userEmailDisplay font-semibold text-brand-blue"></span></p>
                     </div>
-                    <button id="addApplicationBtn" class="bg-black text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-300 flex items-center space-x-2 mt-6 sm:mt-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        <span>Add Application</span>
-                    </button>
+                    <div class="flex items-center gap-4 mt-6 sm:mt-0">
+                         <button id="downloadExcelBtn" class="bg-gray-100 text-text-dark font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            <span>Download</span>
+                        </button>
+                        <button id="addApplicationBtn" class="bg-black text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-300 flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            <span>Add Application</span>
+                        </button>
+                    </div>
                 </div>
                 <div class="bg-white rounded-xl overflow-x-auto">
                     <table class="min-w-full">
@@ -326,6 +334,7 @@
         let currentUserId = null;
         let applicationsCollectionRef;
         let unsubscribeApplications = null;
+        let currentApplications = []; // To store the current list of applications for export
 
         const loginPage = document.getElementById('loginPage');
         const mainHeader = document.getElementById('mainHeader');
@@ -337,6 +346,7 @@
         const tabContents = document.querySelectorAll('.tab-content');
         const applicationModal = document.getElementById('applicationModal');
         const addApplicationBtn = document.getElementById('addApplicationBtn');
+        const downloadExcelBtn = document.getElementById('downloadExcelBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const cancelModalBtn = document.getElementById('cancelModalBtn');
         const applicationForm = document.getElementById('applicationForm');
@@ -432,6 +442,7 @@
             unsubscribeApplications = onSnapshot(q, (querySnapshot) => {
                 const applications = [];
                 querySnapshot.forEach((doc) => applications.push({ id: doc.id, ...doc.data() }));
+                currentApplications = applications; // Store for Excel export
                 renderApplications(applications);
                 hideLoading();
             }, (error) => {
@@ -516,7 +527,35 @@
                 } finally { hideLoading(); }
             });
         }
+        
+        function downloadAsExcel() {
+            if (currentApplications.length === 0) {
+                alertUser('No applications to download.', 'info');
+                return;
+            }
 
+            // Re-format data for a cleaner export
+            const dataToExport = currentApplications.map(app => ({
+                "University Name": app.uniName,
+                "Course Applied For": app.courseAppliedFor,
+                "Status": app.status,
+                "Due Date": app.dueDate,
+                "Special Requirements": app.requirements
+            }));
+
+            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
+
+            // Auto-size columns
+            const cols = Object.keys(dataToExport[0]).map(key => ({
+                wch: Math.max(20, ...dataToExport.map(row => (row[key] ? row[key].toString().length : 0)), key.length)
+            }));
+            worksheet["!cols"] = cols;
+
+            XLSX.writeFile(workbook, "My_UniTrack_Applications.xlsx");
+        }
+        
         function getDaysRemaining(dueDateString) {
              if (!dueDateString) return { text: 'N/A', colorClass: 'text-text-light' };
             const today = new Date();
@@ -623,7 +662,11 @@
             });
         });
 
-        [addApplicationBtn, closeModalBtn, cancelModalBtn].forEach(btn => btn.addEventListener('click', btn.id.includes('add') ? openModal : closeModal));
+        addApplicationBtn.addEventListener('click', () => openModal());
+        downloadExcelBtn.addEventListener('click', downloadAsExcel);
+        closeModalBtn.addEventListener('click', closeModal);
+        cancelModalBtn.addEventListener('click', closeModal);
+        
         confirmCancelBtn.addEventListener('click', closeConfirmModal);
         confirmOkBtn.addEventListener('click', () => {
             if(confirmCallback) confirmCallback();
