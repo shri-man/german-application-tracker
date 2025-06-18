@@ -384,7 +384,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        // This function will contain all the logic and will be called once the DOM is ready.
         function main() {
             let currentUserId = null;
             let applicationsCollectionRef;
@@ -990,6 +989,12 @@
                 }
             }
         };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', main);
+        } else {
+            main();
+        }
 
     </script>
 </body>
