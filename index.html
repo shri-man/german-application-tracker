@@ -124,6 +124,30 @@
         .uni-group-row.expanded .arrow-icon { transform: rotate(90deg); }
         .course-details-row { display: none; }
         .course-details-row.expanded { display: table-row; }
+        
+        /* Parallax Scrolling Styles */
+        .parallax-section {
+            height: 100vh;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        .parallax-content {
+            background-color: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 2.5rem;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 1rem;
+        }
+
     </style>
 </head>
 <body class="bg-white text-text-dark">
@@ -171,37 +195,39 @@
     <main id="mainContent">
         <!-- Home Section -->
         <section id="home" class="tab-content">
-            <div class="bg-light-gray">
-                <div class="container mx-auto px-6 pt-24 pb-32 text-center">
-                    <h1 class="text-5xl md:text-7xl font-black text-text-dark tracking-tighter">Your Path to Germany.</h1>
-                    <h2 class="text-5xl md:text-7xl font-black text-brand-blue tracking-tighter mt-2">Perfectly Organized.</h2>
-                    <p class="mt-8 text-lg max-w-2xl mx-auto text-text-light">Stop juggling spreadsheets and notes. UniTrack is the clean, simple, and powerful way to manage your university applications, so you can focus on what matters most.</p>
+            <!-- Parallax Section 1: Hero -->
+            <div class="parallax-section" style="background-image: url('https://images.pexels.com/photos/1683975/pexels-photo-1683975.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                <div class="parallax-content fade-in-section">
+                    <h1 class="text-4xl md:text-6xl font-black tracking-tighter">Your Path to Germany.</h1>
+                    <p class="mt-4 text-lg md:text-xl max-w-xl mx-auto opacity-90">Stop juggling spreadsheets. Start your journey, perfectly organized.</p>
+                    <button onclick="document.querySelector('a[data-tab=\'applications\']').click()" class="mt-8 px-8 py-3 bg-brand-yellow text-text-dark font-bold rounded-lg shadow-lg hover:bg-yellow-400 transform hover:scale-105 transition-all duration-300">
+                        View My Applications
+                    </button>
                 </div>
             </div>
 
-            <div class="container mx-auto px-6 -mt-20">
-                <div class="flex justify-center">
-                    <!-- Wishlist Section -->
-                    <div class="w-full md:w-2/3 lg:w-1/2 bg-white p-8 rounded-xl shadow-lg fade-in-section">
-                        <h3 class="text-2xl font-bold text-text-dark">University Wishlist</h3>
-                        <p class="text-text-light mt-1 mb-6">Quickly add universities you want to research.</p>
-                        <form id="wishlistForm" class="flex gap-2 mb-4">
-                            <input type="text" id="wishlistInput" placeholder="e.g., Technical University of Munich" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-brand-yellow transition">
-                            <button type="submit" class="px-4 py-2 font-semibold text-white bg-text-dark rounded-md hover:bg-black transition-colors">Add</button>
-                        </form>
-                        <div id="wishlist" class="space-y-3 max-h-48 overflow-y-auto">
-                           <p id="noWishlistText" class="text-text-light">Your wishlist is empty.</p>
-                        </div>
-                    </div>
+            <!-- Parallax Section 2: Clarity -->
+            <div class="parallax-section" style="background-image: url('https://images.pexels.com/photos/1388069/pexels-photo-1388069.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                 <div class="parallax-content fade-in-section">
+                    <h2 class="text-3xl md:text-5xl font-black tracking-tighter">Clarity in Every Step.</h2>
+                    <p class="mt-4 text-lg max-w-xl mx-auto opacity-90">From the historic Reichstag to the most modern lecture halls, your vision for the future starts with a clear plan. Track every deadline and requirement with ease.</p>
+                </div>
+            </div>
+
+             <!-- Parallax Section 3: The Goal -->
+            <div class="parallax-section" style="background-image: url('https://images.pexels.com/photos/1769649/pexels-photo-1769649.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+                 <div class="parallax-content fade-in-section">
+                    <h2 class="text-3xl md:text-5xl font-black tracking-tighter">Achieve Your Dreams.</h2>
+                    <p class="mt-4 text-lg max-w-xl mx-auto opacity-90">Your academic adventure awaits amidst timeless monuments and vibrant culture. Let's get you there.</p>
                 </div>
             </div>
             
              <!-- Final Call to Action Section -->
              <div class="bg-white py-24">
                 <div class="container mx-auto px-6 text-center">
-                    <h2 class="text-4xl font-black text-text-dark tracking-tighter">Ready for the Next Step?</h2>
-                    <p class="mt-4 text-lg max-w-2xl mx-auto text-text-light">Take control of your applications and view your full dashboard.</p>
-                    <button onclick="document.querySelector('a[data-tab=\'applications\']').click()" class="mt-8 px-8 py-4 bg-brand-yellow text-text-dark font-bold rounded-lg shadow-lg hover:bg-yellow-400 transform hover:scale-105 transition-all duration-300">
+                    <h2 class="text-4xl font-black text-text-dark tracking-tighter">Ready to Begin?</h2>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-text-light">Take control of your applications today.</p>
+                    <button onclick="document.querySelector('a[data-tab=\'applications\']').click()" class="mt-8 px-8 py-4 bg-black text-white font-bold rounded-lg shadow-lg hover:bg-gray-800 transform hover:scale-105 transition-all duration-300">
                         Go to My Dashboard
                     </button>
                 </div>
@@ -358,629 +384,612 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         
-        let currentUserId = null;
-        let applicationsCollectionRef;
-        let wishlistCollectionRef;
-        let unsubscribeApplications = null;
-        let unsubscribeWishlist = null;
-        let currentApplications = []; 
+        // This function will contain all the logic and will be called once the DOM is ready.
+        function main() {
+            let currentUserId = null;
+            let applicationsCollectionRef;
+            let wishlistCollectionRef;
+            let unsubscribeApplications = null;
+            let unsubscribeWishlist = null;
+            let currentApplications = []; 
 
-        const loginPage = document.getElementById('loginPage');
-        const mainHeader = document.getElementById('mainHeader');
-        const mainContent = document.getElementById('mainContent');
-        const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const navLinks = document.querySelectorAll('.nav-link');
-        const tabContents = document.querySelectorAll('.tab-content');
-        const applicationModal = document.getElementById('applicationModal');
-        const addApplicationBtn = document.getElementById('addApplicationBtn');
-        const importBtn = document.getElementById('importBtn');
-        const fileInput = document.getElementById('fileInput');
-        const downloadExcelBtn = document.getElementById('downloadExcelBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const cancelModalBtn = document.getElementById('cancelModalBtn');
-        const applicationForm = document.getElementById('applicationForm');
-        const modalTitle = document.getElementById('modalTitle');
-        const applicationIdInput = document.getElementById('applicationId');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const confirmModal = document.getElementById('confirmModal');
-        const confirmModalTitle = document.getElementById('confirmModalTitle');
-        const confirmModalMessage = document.getElementById('confirmModalMessage');
-        const confirmCancelBtn = document.getElementById('confirmCancelBtn');
-        const confirmOkBtn = document.getElementById('confirmOkBtn');
-        let confirmCallback = null;
-        
-        const mergeConflictModal = document.getElementById('mergeConflictModal');
-        const existingDataContainer = document.getElementById('existingDataContainer');
-        const importedDataContainer = document.getElementById('importedDataContainer');
-        const keepExistingBtn = document.getElementById('keepExistingBtn');
-        const updateWithImportedBtn = document.getElementById('updateWithImportedBtn');
-
-        // New Homepage elements
-        const preparingList = document.getElementById('preparingList');
-        const noPreparingText = document.getElementById('noPreparingText');
-        const wishlistDiv = document.getElementById('wishlist');
-        const wishlistForm = document.getElementById('wishlistForm');
-        const wishlistInput = document.getElementById('wishlistInput');
-        const noWishlistText = document.getElementById('noWishlistText');
-        
-        // New Application Section Containers
-        const preparingTableContainer = document.getElementById('preparingTableContainer');
-        const decidedTableContainer = document.getElementById('decidedTableContainer');
-        const pendingTableContainer = document.getElementById('pendingTableContainer');
+            const loginPage = document.getElementById('loginPage');
+            const mainHeader = document.getElementById('mainHeader');
+            const mainContent = document.getElementById('mainContent');
+            const loginBtn = document.getElementById('loginBtn');
+            const signupBtn = document.getElementById('signupBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const applicationModal = document.getElementById('applicationModal');
+            const addApplicationBtn = document.getElementById('addApplicationBtn');
+            const importBtn = document.getElementById('importBtn');
+            const fileInput = document.getElementById('fileInput');
+            const downloadExcelBtn = document.getElementById('downloadExcelBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cancelModalBtn = document.getElementById('cancelModalBtn');
+            const applicationForm = document.getElementById('applicationForm');
+            const modalTitle = document.getElementById('modalTitle');
+            const applicationIdInput = document.getElementById('applicationId');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const confirmModal = document.getElementById('confirmModal');
+            const confirmModalTitle = document.getElementById('confirmModalTitle');
+            const confirmModalMessage = document.getElementById('confirmModalMessage');
+            const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+            const confirmOkBtn = document.getElementById('confirmOkBtn');
+            let confirmCallback = null;
+            
+            const mergeConflictModal = document.getElementById('mergeConflictModal');
+            const existingDataContainer = document.getElementById('existingDataContainer');
+            const importedDataContainer = document.getElementById('importedDataContainer');
+            const keepExistingBtn = document.getElementById('keepExistingBtn');
+            const updateWithImportedBtn = document.getElementById('updateWithImportedBtn');
+            
+            const wishlistDiv = document.getElementById('wishlist');
+            const wishlistForm = document.getElementById('wishlistForm');
+            const wishlistInput = document.getElementById('wishlistInput');
+            const noWishlistText = document.getElementById('noWishlistText');
+            
+            const preparingTableContainer = document.getElementById('preparingTableContainer');
+            const decidedTableContainer = document.getElementById('decidedTableContainer');
+            const pendingTableContainer = document.getElementById('pendingTableContainer');
 
 
-        function showLoginPage() {
-            loginPage.style.display = 'flex';
-            mainHeader.style.display = 'none';
-            mainContent.style.display = 'none';
-            hideLoading();
-        }
+            function showLoginPage() {
+                loginPage.style.display = 'flex';
+                mainHeader.style.display = 'none';
+                mainContent.style.display = 'none';
+                hideLoading();
+            }
 
-        function showAppPage(user) {
-            loginPage.style.display = 'none';
-            mainHeader.style.display = 'block';
-            mainContent.style.display = 'block';
-            document.querySelectorAll('.userEmailDisplay').forEach(el => {
-                el.textContent = user.email;
+            function showAppPage(user) {
+                loginPage.style.display = 'none';
+                mainHeader.style.display = 'block';
+                mainContent.style.display = 'block';
+                document.querySelectorAll('.userEmailDisplay').forEach(el => {
+                    el.textContent = user.email;
+                });
+                handleInitialTab();
+            }
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    showAppPage(user);
+                    initializeData(user);
+                } else {
+                    if (unsubscribeApplications) unsubscribeApplications();
+                    if (unsubscribeWishlist) unsubscribeWishlist();
+                    showLoginPage();
+                }
             });
-            handleInitialTab();
-        }
 
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                showAppPage(user);
-                initializeData(user);
-            } else {
+            signupBtn.addEventListener('click', async () => {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                if (!email || !password) return alertUser("Please enter email and password.", "error");
+                showLoading();
+                try { await createUserWithEmailAndPassword(auth, email, password); } 
+                catch (error) { alertUser(getAuthErrorMessage(error.code), "error"); } 
+                finally { hideLoading(); }
+            });
+
+            loginBtn.addEventListener('click', async () => {
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                if (!email || !password) return alertUser("Please enter email and password.", "error");
+                showLoading();
+                try { await signInWithEmailAndPassword(auth, email, password); } 
+                catch (error) { alertUser(getAuthErrorMessage(error.code), "error"); } 
+                finally { hideLoading(); }
+            });
+            
+            logoutBtn.addEventListener('click', () => signOut(auth));
+
+            function getAuthErrorMessage(errorCode) {
+                switch (errorCode) {
+                    case 'auth/invalid-email': return 'Please enter a valid email address.';
+                    case 'auth/user-not-found': case 'auth/wrong-password': return 'Invalid email or password.';
+                    case 'auth/email-already-in-use': return 'An account with this email already exists.';
+                    case 'auth/weak-password': return 'Password should be at least 6 characters long.';
+                    default: return 'An authentication error occurred. Please try again.';
+                }
+            }
+
+            async function initializeData(user) {
+                currentUserId = user.uid;
+                const userApplicationsPath = `artifacts/${appId}/users/${currentUserId}/applications`;
+                const userWishlistPath = `artifacts/${appId}/users/${currentUserId}/wishlist`;
+                applicationsCollectionRef = collection(db, userApplicationsPath);
+                wishlistCollectionRef = collection(db, userWishlistPath);
+                
                 if (unsubscribeApplications) unsubscribeApplications();
                 if (unsubscribeWishlist) unsubscribeWishlist();
-                showLoginPage();
-            }
-        });
-
-        signupBtn.addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            if (!email || !password) return alertUser("Please enter email and password.", "error");
-            showLoading();
-            try { await createUserWithEmailAndPassword(auth, email, password); } 
-            catch (error) { alertUser(getAuthErrorMessage(error.code), "error"); } 
-            finally { hideLoading(); }
-        });
-
-        loginBtn.addEventListener('click', async () => {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            if (!email || !password) return alertUser("Please enter email and password.", "error");
-            showLoading();
-            try { await signInWithEmailAndPassword(auth, email, password); } 
-            catch (error) { alertUser(getAuthErrorMessage(error.code), "error"); } 
-            finally { hideLoading(); }
-        });
-        
-        logoutBtn.addEventListener('click', () => signOut(auth));
-
-        function getAuthErrorMessage(errorCode) {
-            switch (errorCode) {
-                case 'auth/invalid-email': return 'Please enter a valid email address.';
-                case 'auth/user-not-found': case 'auth/wrong-password': return 'Invalid email or password.';
-                case 'auth/email-already-in-use': return 'An account with this email already exists.';
-                case 'auth/weak-password': return 'Password should be at least 6 characters long.';
-                default: return 'An authentication error occurred. Please try again.';
-            }
-        }
-
-        async function initializeData(user) {
-            currentUserId = user.uid;
-            const userApplicationsPath = `artifacts/${appId}/users/${currentUserId}/applications`;
-            const userWishlistPath = `artifacts/${appId}/users/${currentUserId}/wishlist`;
-            applicationsCollectionRef = collection(db, userApplicationsPath);
-            wishlistCollectionRef = collection(db, userWishlistPath);
-            
-            if (unsubscribeApplications) unsubscribeApplications();
-            if (unsubscribeWishlist) unsubscribeWishlist();
-            
-            showLoading();
-            const qApps = query(applicationsCollectionRef, orderBy("uniName", "asc"), orderBy("courseAppliedFor", "asc"));
-            unsubscribeApplications = onSnapshot(qApps, (querySnapshot) => {
-                currentApplications = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderAllApplicationSections(currentApplications);
-                hideLoading();
-            }, (error) => {
-                console.error("Firestore snapshot error (Applications): ", error);
-                if (error.code.includes('failed-precondition')) {
-                     alertUser("Missing Firestore index. Please create one in Firebase.", "error");
-                } else { alertUser(`Error fetching applications: ${error.message}`, "error"); }
-                hideLoading();
-            });
-
-            const qWishlist = query(wishlistCollectionRef, orderBy("createdAt", "desc"));
-            unsubscribeWishlist = onSnapshot(qWishlist, (querySnapshot) => {
-                const wishlistItems = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderWishlist(wishlistItems);
-            }, (error) => {
-                console.error("Firestore snapshot error (Wishlist): ", error);
-                alertUser(`Error fetching wishlist: ${error.message}`, "error");
-            });
-        }
-        
-        function navigateToTab(tabName) {
-            if (window.location.hash !== `#${tabName}`) window.location.hash = tabName;
-            navLinks.forEach(link => link.classList.toggle('nav-active', link.dataset.tab === tabName));
-            tabContents.forEach(content => content.classList.toggle('active', content.id === tabName));
-        };
-
-        function handleInitialTab() {
-            const tabName = window.location.hash.substring(1) || 'home';
-            navigateToTab(tabName);
-            navLinks.forEach(link => link.classList.toggle('nav-active', link.dataset.tab === tabName));
-        }
-
-        function showLoading() { loadingSpinner.style.display = 'block'; }
-        function hideLoading() { loadingSpinner.style.display = 'none'; }
-
-        function openModal(appData = null, isNew = false) {
-            applicationForm.reset();
-            applicationIdInput.value = '';
-            modalTitle.textContent = 'Add New Application';
-            if (appData) {
-                if (!isNew) {
-                    modalTitle.textContent = 'Edit Application';
-                    applicationIdInput.value = appData.id;
-                }
-                document.getElementById('uniName').value = appData.uniName || '';
-                document.getElementById('courseAppliedFor').value = appData.courseAppliedFor || '';
-                document.getElementById('status').value = appData.status || 'Preparing';
-                document.getElementById('dueDate').value = appData.dueDate || '';
-                document.getElementById('requirements').value = appData.requirements || '';
-            }
-            applicationModal.style.display = 'block';
-        }
-
-        function closeModal() { applicationModal.style.display = 'none'; }
-
-        applicationForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            if (!currentUserId) return alertUser("You must be logged in.", "error");
-            showLoading();
-            const id = applicationIdInput.value;
-            const applicationData = {
-                uniName: document.getElementById('uniName').value.trim(),
-                courseAppliedFor: document.getElementById('courseAppliedFor').value.trim(),
-                status: document.getElementById('status').value,
-                dueDate: document.getElementById('dueDate').value,
-                requirements: document.getElementById('requirements').value.trim(),
-                updatedAt: serverTimestamp()
-            };
-            try {
-                if (id) await setDoc(doc(applicationsCollectionRef, id), applicationData, { merge: true });
-                else {
-                    applicationData.createdAt = serverTimestamp();
-                    await addDoc(applicationsCollectionRef, applicationData);
-                }
-                alertUser("Application saved!", "success");
-                closeModal();
-            } catch (error) {
-                alertUser(`Error saving application: ${error.message}`, "error");
-            } finally { hideLoading(); }
-        });
-
-        async function deleteApplication(id) {
-             openConfirmModal("Delete Application", "Are you sure? This cannot be undone.", async () => {
+                
                 showLoading();
+                const qApps = query(applicationsCollectionRef, orderBy("uniName", "asc"), orderBy("courseAppliedFor", "asc"));
+                unsubscribeApplications = onSnapshot(qApps, (querySnapshot) => {
+                    currentApplications = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderAllApplicationSections(currentApplications);
+                    hideLoading();
+                }, (error) => {
+                    console.error("Firestore snapshot error (Applications): ", error);
+                    if (error.code.includes('failed-precondition')) {
+                         alertUser("Missing Firestore index. Please create one in Firebase.", "error");
+                    } else { alertUser(`Error fetching applications: ${error.message}`, "error"); }
+                    hideLoading();
+                });
+
+                const qWishlist = query(wishlistCollectionRef, orderBy("createdAt", "desc"));
+                unsubscribeWishlist = onSnapshot(qWishlist, (querySnapshot) => {
+                    const wishlistItems = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderWishlist(wishlistItems);
+                }, (error) => {
+                    console.error("Firestore snapshot error (Wishlist): ", error);
+                    alertUser(`Error fetching wishlist: ${error.message}`, "error");
+                });
+            }
+            
+            function navigateToTab(tabName) {
+                if (window.location.hash !== `#${tabName}`) window.location.hash = tabName;
+                navLinks.forEach(link => link.classList.toggle('nav-active', link.dataset.tab === tabName));
+                tabContents.forEach(content => content.classList.toggle('active', content.id === tabName));
+            };
+
+            function handleInitialTab() {
+                const tabName = window.location.hash.substring(1) || 'home';
+                navigateToTab(tabName);
+                navLinks.forEach(link => link.classList.toggle('nav-active', link.dataset.tab === tabName));
+            }
+
+            function showLoading() { loadingSpinner.style.display = 'block'; }
+            function hideLoading() { loadingSpinner.style.display = 'none'; }
+
+            function openModal(appData = null, isNew = false) {
+                applicationForm.reset();
+                applicationIdInput.value = '';
+                modalTitle.textContent = 'Add New Application';
+                if (appData) {
+                    if (!isNew) {
+                        modalTitle.textContent = 'Edit Application';
+                        applicationIdInput.value = appData.id;
+                    }
+                    document.getElementById('uniName').value = appData.uniName || '';
+                    document.getElementById('courseAppliedFor').value = appData.courseAppliedFor || '';
+                    document.getElementById('status').value = appData.status || 'Preparing';
+                    document.getElementById('dueDate').value = appData.dueDate || '';
+                    document.getElementById('requirements').value = appData.requirements || '';
+                }
+                applicationModal.style.display = 'block';
+            }
+
+            function closeModal() { applicationModal.style.display = 'none'; }
+
+            applicationForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!currentUserId) return alertUser("You must be logged in.", "error");
+                showLoading();
+                const id = applicationIdInput.value;
+                const applicationData = {
+                    uniName: document.getElementById('uniName').value.trim(),
+                    courseAppliedFor: document.getElementById('courseAppliedFor').value.trim(),
+                    status: document.getElementById('status').value,
+                    dueDate: document.getElementById('dueDate').value,
+                    requirements: document.getElementById('requirements').value.trim(),
+                    updatedAt: serverTimestamp()
+                };
                 try {
-                    await deleteDoc(doc(applicationsCollectionRef, id));
-                    alertUser("Application deleted.", "success");
+                    if (id) await setDoc(doc(applicationsCollectionRef, id), applicationData, { merge: true });
+                    else {
+                        applicationData.createdAt = serverTimestamp();
+                        await addDoc(applicationsCollectionRef, applicationData);
+                    }
+                    alertUser("Application saved!", "success");
+                    closeModal();
                 } catch (error) {
-                    alertUser(`Error deleting application: ${error.message}`, "error");
+                    alertUser(`Error saving application: ${error.message}`, "error");
                 } finally { hideLoading(); }
             });
-        }
-        
-        wishlistForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const uniName = wishlistInput.value.trim();
-            if (uniName && currentUserId) {
-                try {
-                    await addDoc(wishlistCollectionRef, { name: uniName, researched: false, createdAt: serverTimestamp() });
-                    wishlistInput.value = '';
-                } catch (error) { alertUser(`Error adding to wishlist: ${error.message}`, "error"); }
+
+            async function deleteApplication(id) {
+                 openConfirmModal("Delete Application", "Are you sure? This cannot be undone.", async () => {
+                    showLoading();
+                    try {
+                        await deleteDoc(doc(applicationsCollectionRef, id));
+                        alertUser("Application deleted.", "success");
+                    } catch (error) {
+                        alertUser(`Error deleting application: ${error.message}`, "error");
+                    } finally { hideLoading(); }
+                });
             }
-        });
-
-        async function updateWishlistItem(id, researched) {
-            if (!currentUserId) return;
-            try { await updateDoc(doc(wishlistCollectionRef, id), { researched }); } 
-            catch(error) { alertUser(`Error updating wishlist: ${error.message}`, "error"); }
-        }
-
-        async function deleteWishlistItem(id) {
-            if (!currentUserId) return;
-            try { await deleteDoc(doc(wishlistCollectionRef, id)); } 
-            catch(error) { alertUser(`Error deleting from wishlist: ${error.message}`, "error"); }
-        }
-
-        function downloadAsExcel() {
-            if (currentApplications.length === 0) return alertUser('No applications to download.', 'info');
-            const dataToExport = currentApplications.map(app => ({
-                "University Name": app.uniName, "Course Applied For": app.courseAppliedFor, "Status": app.status,
-                "Due Date": app.dueDate, "Special Requirements": app.requirements
-            }));
-            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
-            const cols = Object.keys(dataToExport[0]).map(key => ({
-                wch: Math.max(20, ...dataToExport.map(row => (row[key] ? row[key].toString().length : 0)), key.length)
-            }));
-            worksheet["!cols"] = cols;
-            XLSX.writeFile(workbook, "My_UniTrack_Applications.xlsx");
-        }
-        
-        function getDaysRemaining(dueDateString, status) {
-            if (!dueDateString) return { text: 'N/A', colorClass: 'text-text-light' };
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const dateParts = dueDateString.split('-').map(part => parseInt(part, 10));
-            const dueDate = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
-            if (isNaN(dueDate.getTime())) return { text: 'Invalid Date', colorClass: 'text-text-light' };
-            const diffTime = dueDate.getTime() - today.getTime();
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            if (diffDays < 0) {
-                return { text: status === 'Not Applied' ? 'Deadline Passed' : `${Math.abs(diffDays)} days overdue`, colorClass: 'text-red-600 font-semibold' };
-            }
-            if (diffDays === 0) return { text: 'Due today', colorClass: 'text-orange-500 font-semibold' };
-            if (diffDays <= 7) return { text: `${diffDays} days`, colorClass: 'text-yellow-600 font-semibold' };
-            return { text: `${diffDays} days`, colorClass: 'text-green-600' };
-        }
-        
-        function renderAllApplicationSections(applications) {
-            const preparingApps = applications.filter(app => app.status === 'Preparing');
-            const decidedApps = applications.filter(app => ['Accepted', 'Rejected', 'Waitlisted'].includes(app.status));
-            const pendingApps = applications.filter(app => ['Applied', 'Not Applied'].includes(app.status));
-
-            renderTableSection(preparingTableContainer, preparingApps);
-            renderTableSection(decidedTableContainer, decidedApps);
-            renderTableSection(pendingTableContainer, pendingApps);
-        }
-
-        function renderTableSection(container, applications) {
-            container.innerHTML = '';
             
-            const groupedApps = applications.reduce((acc, app) => {
-                const uniName = app.uniName || 'Unnamed University';
-                if (!acc[uniName]) acc[uniName] = [];
-                acc[uniName].push(app);
-                return acc;
-            }, {});
-
-            if (Object.keys(groupedApps).length === 0) {
-                 container.innerHTML = `<div class="px-6 py-8 text-center text-text-light"><p>No applications in this section.</p></div>`;
-                 return;
-            }
-
-            const table = document.createElement('table');
-            table.className = 'min-w-full';
-            
-            const thead = document.createElement('thead');
-            thead.className = 'border-b border-gray-200';
-            thead.innerHTML = `
-                <tr>
-                    <th scope="col" class="pl-12 pr-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">University</th>
-                    <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Courses</th>
-                    <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-text-light uppercase tracking-wider"></th>
-                </tr>`;
-            table.appendChild(thead);
-            
-            const tbody = document.createElement('tbody');
-            tbody.className = 'divide-y divide-gray-100';
-
-            Object.entries(groupedApps).forEach(([uniName, apps]) => {
-                const groupRow = tbody.insertRow();
-                groupRow.className = 'uni-group-row bg-white hover:bg-light-gray transition-colors';
-                groupRow.dataset.uni = uniName;
-                groupRow.innerHTML = `
-                    <td class="pl-6 pr-6 py-4 whitespace-nowrap text-sm font-bold text-text-dark">
-                        <div class="flex items-center">
-                            <svg class="arrow-icon w-4 h-4 mr-4 text-text-light transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            ${uniName}
-                        </div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${apps.length} Application(s)</td>
-                    <td class="px-6 py-4"></td>
-                `;
-
-                const detailsRow = tbody.insertRow();
-                detailsRow.className = 'course-details-row';
-                const detailsCell = detailsRow.insertCell();
-                detailsCell.colSpan = 3;
-                detailsCell.className = 'p-0';
-                
-                const nestedTable = document.createElement('table');
-                nestedTable.className = 'min-w-full';
-                nestedTable.innerHTML = `
-                    <thead class="sr-only"><tr><th>Course</th><th>Status</th><th>Due Date</th><th>Countdown</th><th>Requirements</th><th>Actions</th></tr></thead>
-                    <tbody class="divide-y divide-gray-200">
-                    ${apps.map(app => `
-                        <tr class="bg-light-gray/50 hover:bg-light-gray">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-text-dark w-1/4">${app.courseAppliedFor || ''}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${app.status || 'N/A'}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${app.dueDate ? new Date(app.dueDate + 'T00:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm ${getDaysRemaining(app.dueDate, app.status).colorClass}">${getDaysRemaining(app.dueDate, app.status).text}</td>
-                            <td class="px-6 py-4 text-sm text-text-light max-w-xs truncate" title="${app.requirements || ''}">${app.requirements || 'N/A'}</td>
-                            <td class="px-6 py-4 text-right text-sm font-medium space-x-4">
-                                <button class="text-brand-blue hover:text-dark-blue font-semibold transition-colors edit-app-btn" data-id="${app.id}">Edit</button>
-                                <button class="text-red-600 hover:text-red-800 font-semibold transition-colors delete-app-btn" data-id="${app.id}">Delete</button>
-                            </td>
-                        </tr>
-                    `).join('')}
-                    </tbody>
-                `;
-                detailsCell.appendChild(nestedTable);
-
-                groupRow.addEventListener('click', () => {
-                    groupRow.classList.toggle('expanded');
-                    detailsRow.classList.toggle('expanded');
-                });
-            });
-            
-            table.appendChild(tbody);
-            container.appendChild(table);
-
-            container.querySelectorAll('.edit-app-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation(); 
-                    const app = currentApplications.find(a => a.id === e.target.dataset.id);
-                    if (app) openModal(app);
-                });
-            });
-            container.querySelectorAll('.delete-app-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    deleteApplication(e.target.dataset.id);
-                });
-            });
-        }
-        
-        function renderPreparingList(applications) {
-            const preparingApps = applications.filter(app => app.status === 'Preparing');
-            preparingList.innerHTML = '';
-            if (preparingApps.length > 0) {
-                noPreparingText.style.display = 'none';
-                preparingApps.forEach(app => {
-                    const div = document.createElement('div');
-                    div.className = 'p-3 bg-light-gray rounded-lg flex justify-between items-center';
-                    div.innerHTML = `<span class="font-semibold text-text-dark">${app.uniName}</span><span class="text-sm text-text-light">${app.dueDate || ''}</span>`;
-                    preparingList.appendChild(div);
-                });
-            } else {
-                noPreparingText.style.display = 'block';
-            }
-        }
-
-        function renderWishlist(items) {
-            wishlistDiv.innerHTML = '';
-            if (items.length > 0) {
-                noWishlistText.style.display = 'none';
-                items.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'wishlist-item flex items-center justify-between';
-                    
-                    const id = `wishlist-${item.id}`;
-                    div.innerHTML = `
-                        <input type="checkbox" id="${id}" class="hidden" ${item.researched ? 'checked' : ''}>
-                        <label for="${id}" class="flex items-center cursor-pointer text-text-dark w-full p-2 rounded-md hover:bg-light-gray">
-                            <span class="w-5 h-5 mr-3 rounded border-2 border-gray-300 flex items-center justify-center transition-all flex-shrink-0">
-                                <svg class="w-3 h-3 text-white transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
-                            </span>
-                            <span class="transition-colors">${item.name}</span>
-                        </label>
-                        <button class="delete-wishlist-item text-gray-400 hover:text-red-500 transition-colors ml-2 p-1 flex-shrink-0">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                        </button>
-                    `;
-                    div.querySelector('input').addEventListener('change', (e) => updateWishlistItem(item.id, e.target.checked));
-                    div.querySelector('.delete-wishlist-item').addEventListener('click', () => deleteWishlistItem(item.id));
-
-                    wishlistDiv.appendChild(div);
-                });
-            } else {
-                noWishlistText.style.display = 'block';
-            }
-        }
-        
-        function openConfirmModal(title, message, callback) { confirmModalTitle.textContent = title; confirmModalMessage.textContent = message; confirmCallback = callback; confirmModal.style.display = 'block'; }
-        function closeConfirmModal() { confirmModal.style.display = 'none'; confirmCallback = null; }
-        function alertUser(message, type = "info") {
-            const alertBox = document.createElement('div');
-            Object.assign(alertBox.style, { position: 'fixed', left: '50%', bottom: '20px', transform: 'translateX(-50%)', padding: '12px 20px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', zIndex: '2000', fontSize: '14px', opacity: '0', color: 'white', transition: 'opacity 0.3s ease-in-out, bottom 0.3s ease-in-out', backgroundColor: type === 'success' ? '#4CAF50' : (type === 'error' ? '#F44336' : '#2196F3') });
-            alertBox.textContent = message;
-            document.body.appendChild(alertBox);
-            setTimeout(() => { alertBox.style.opacity = '1'; alertBox.style.bottom = '30px'; }, 10);
-            setTimeout(() => { alertBox.style.opacity = '0'; setTimeout(() => alertBox.remove(), 300); }, 3500);
-        }
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('is-visible');
-            });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
-        
-        window.addEventListener('scroll', () => {
-            mainHeader.classList.toggle('scrolled', window.scrollY > 10);
-        });
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
+            wishlistForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                navigateToTab(e.target.dataset.tab);
+                const uniName = wishlistInput.value.trim();
+                if (uniName && currentUserId) {
+                    try {
+                        await addDoc(wishlistCollectionRef, { name: uniName, researched: false, createdAt: serverTimestamp() });
+                        wishlistInput.value = '';
+                    } catch (error) { alertUser(`Error adding to wishlist: ${error.message}`, "error"); }
+                }
             });
-        });
 
-        addApplicationBtn.addEventListener('click', () => openModal(null, true));
-        importBtn.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', handleFileUpload);
-        downloadExcelBtn.addEventListener('click', downloadAsExcel);
-        closeModalBtn.addEventListener('click', closeModal);
-        cancelModalBtn.addEventListener('click', closeModal);
-        
-        confirmCancelBtn.addEventListener('click', closeConfirmModal);
-        confirmOkBtn.addEventListener('click', () => {
-            if(confirmCallback) confirmCallback();
-            closeConfirmModal();
-        });
-        window.addEventListener('click', (e) => {
-            if (e.target === applicationModal) closeModal();
-            if (e.target === confirmModal) closeConfirmModal();
-            if (e.target === mergeConflictModal) closeMergeConflictModal();
-        });
-        
-        // --- New File Import & Merge Functions ---
-        
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            showLoading();
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            if (fileExtension === 'xlsx') parseExcelDoc(file);
-            else if (fileExtension === 'docx') parseWordDoc(file);
-            else {
-                alertUser("Unsupported file type. Please upload .xlsx or .docx files.", "error");
-                hideLoading();
-            }
-            event.target.value = '';
-        }
-
-        function parseExcelDoc(file) {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
-                    const textContent = workbook.SheetNames.map(name => {
-                        const ws = workbook.Sheets[name];
-                        return XLSX.utils.sheet_to_json(ws, { header: 1 }).map(row => row.join(' ')).join('\n');
-                    }).join('\n\n');
-                    await extractInfoWithGemini(textContent);
-                } catch (error) {
-                    console.error("Error parsing Excel file:", error);
-                    alertUser("Could not parse the Excel file.", "error");
-                    hideLoading();
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-        async function parseWordDoc(file) {
-             try {
-                const result = await docx.readArrayBuffer(file);
-                await extractInfoWithGemini(result.value);
-            } catch (error) {
-                console.error("Error parsing Word file:", error);
-                alertUser("Could not parse the Word file.", "error");
-                hideLoading();
-            }
-        }
-        
-        function closeMergeConflictModal() {
-             mergeConflictModal.style.display = 'none';
-        }
-
-        function showMergeConflictModal(existingApp, importedData) {
-            function renderData(container, data) {
-                container.innerHTML = `
-                    <p><strong>Course:</strong> ${data.courseAppliedFor || 'N/A'}</p>
-                    <p><strong>Status:</strong> ${data.status || 'N/A'}</p>
-                    <p><strong>Due Date:</strong> ${data.dueDate || 'N/A'}</p>
-                    <p><strong>Requirements:</strong> ${data.requirements || 'N/A'}</p>
-                `;
+            async function updateWishlistItem(id, researched) {
+                if (!currentUserId) return;
+                try { await updateDoc(doc(wishlistCollectionRef, id), { researched }); } 
+                catch(error) { alertUser(`Error updating wishlist: ${error.message}`, "error"); }
             }
 
-            renderData(existingDataContainer, existingApp);
-            renderData(importedDataContainer, importedData);
+            async function deleteWishlistItem(id) {
+                if (!currentUserId) return;
+                try { await deleteDoc(doc(wishlistCollectionRef, id)); } 
+                catch(error) { alertUser(`Error deleting from wishlist: ${error.message}`, "error"); }
+            }
+
+            function downloadAsExcel() {
+                if (currentApplications.length === 0) return alertUser('No applications to download.', 'info');
+                const dataToExport = currentApplications.map(app => ({
+                    "University Name": app.uniName, "Course Applied For": app.courseAppliedFor, "Status": app.status,
+                    "Due Date": app.dueDate, "Special Requirements": app.requirements
+                }));
+                const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Applications");
+                const cols = Object.keys(dataToExport[0]).map(key => ({
+                    wch: Math.max(20, ...dataToExport.map(row => (row[key] ? row[key].toString().length : 0)), key.length)
+                }));
+                worksheet["!cols"] = cols;
+                XLSX.writeFile(workbook, "My_UniTrack_Applications.xlsx");
+            }
             
-            keepExistingBtn.onclick = closeMergeConflictModal;
-            updateWithImportedBtn.onclick = async () => {
-                showLoading();
-                try {
-                    await setDoc(doc(applicationsCollectionRef, existingApp.id), importedData, { merge: true });
-                    alertUser("Application updated successfully!", "success");
-                } catch(e) {
-                     alertUser("Failed to update application.", "error");
-                } finally {
-                    closeMergeConflictModal();
-                    hideLoading();
+            function getDaysRemaining(dueDateString, status) {
+                if (!dueDateString) return { text: 'N/A', colorClass: 'text-text-light' };
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const dateParts = dueDateString.split('-').map(part => parseInt(part, 10));
+                const dueDate = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
+                if (isNaN(dueDate.getTime())) return { text: 'Invalid Date', colorClass: 'text-text-light' };
+                const diffTime = dueDate.getTime() - today.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays < 0) {
+                    return { text: status === 'Not Applied' ? 'Deadline Passed' : `${Math.abs(diffDays)} days overdue`, colorClass: 'text-red-600 font-semibold' };
                 }
-            };
-
-            mergeConflictModal.style.display = 'block';
-        }
-
-
-        async function extractInfoWithGemini(text) {
-            alertUser("AI is analyzing your document...", "info");
+                if (diffDays === 0) return { text: 'Due today', colorClass: 'text-orange-500 font-semibold' };
+                if (diffDays <= 7) return { text: `${diffDays} days`, colorClass: 'text-yellow-600 font-semibold' };
+                return { text: `${diffDays} days`, colorClass: 'text-green-600' };
+            }
             
-            const prompt = `From the following text, extract the university name, course name, application deadline, and a summary of requirements. The keys should be "uniName", "courseAppliedFor", "dueDate", and "requirements". Format the deadline as<x_bin_660>-MM-dd. If info is missing, use an empty string. Text: \n\n${text}`;
-            
-            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-            const payload = { 
-                contents: chatHistory,
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            "uniName": { "type": "STRING" },
-                            "courseAppliedFor": { "type": "STRING" },
-                            "dueDate": { "type": "STRING", "description": "Date in<x_bin_660>-MM-dd format" },
-                            "requirements": { "type": "STRING" }
-                        },
-                    }
+            function renderAllApplicationSections(applications) {
+                const preparingApps = applications.filter(app => app.status === 'Preparing');
+                const decidedApps = applications.filter(app => ['Accepted', 'Rejected', 'Waitlisted'].includes(app.status));
+                const pendingApps = applications.filter(app => ['Applied', 'Not Applied'].includes(app.status));
+
+                renderTableSection(preparingTableContainer, preparingApps);
+                renderTableSection(decidedTableContainer, decidedApps);
+                renderTableSection(pendingTableContainer, pendingApps);
+            }
+
+            function renderTableSection(container, applications) {
+                container.innerHTML = '';
+                
+                const groupedApps = applications.reduce((acc, app) => {
+                    const uniName = app.uniName || 'Unnamed University';
+                    if (!acc[uniName]) acc[uniName] = [];
+                    acc[uniName].push(app);
+                    return acc;
+                }, {});
+
+                if (Object.keys(groupedApps).length === 0) {
+                     container.innerHTML = `<div class="px-6 py-8 text-center text-text-light"><p>No applications in this section.</p></div>`;
+                     return;
                 }
-            };
 
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const table = document.createElement('table');
+                table.className = 'min-w-full';
+                
+                const thead = document.createElement('thead');
+                thead.className = 'border-b border-gray-200';
+                thead.innerHTML = `
+                    <tr>
+                        <th scope="col" class="pl-12 pr-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">University</th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-text-light uppercase tracking-wider">Courses</th>
+                        <th scope="col" class="px-6 py-4 text-right text-xs font-semibold text-text-light uppercase tracking-wider"></th>
+                    </tr>`;
+                table.appendChild(thead);
+                
+                const tbody = document.createElement('tbody');
+                tbody.className = 'divide-y divide-gray-100';
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                Object.entries(groupedApps).forEach(([uniName, apps]) => {
+                    const groupRow = tbody.insertRow();
+                    groupRow.className = 'uni-group-row bg-white hover:bg-light-gray transition-colors';
+                    groupRow.dataset.uni = uniName;
+                    groupRow.innerHTML = `
+                        <td class="pl-6 pr-6 py-4 whitespace-nowrap text-sm font-bold text-text-dark">
+                            <div class="flex items-center">
+                                <svg class="arrow-icon w-4 h-4 mr-4 text-text-light transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                ${uniName}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${apps.length} Application(s)</td>
+                        <td class="px-6 py-4"></td>
+                    `;
+
+                    const detailsRow = tbody.insertRow();
+                    detailsRow.className = 'course-details-row';
+                    const detailsCell = detailsRow.insertCell();
+                    detailsCell.colSpan = 3;
+                    detailsCell.className = 'p-0';
+                    
+                    const nestedTable = document.createElement('table');
+                    nestedTable.className = 'min-w-full';
+                    nestedTable.innerHTML = `
+                        <thead class="sr-only"><tr><th>Course</th><th>Status</th><th>Due Date</th><th>Countdown</th><th>Requirements</th><th>Actions</th></tr></thead>
+                        <tbody class="divide-y divide-gray-200">
+                        ${apps.map(app => `
+                            <tr class="bg-light-gray/50 hover:bg-light-gray">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-text-dark w-1/4">${app.courseAppliedFor || ''}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${app.status || 'N/A'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${app.dueDate ? new Date(app.dueDate + 'T00:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}</td>
+                                <td class="px-4 py-4 whitespace-nowrap text-sm ${getDaysRemaining(app.dueDate, app.status).colorClass}">${getDaysRemaining(app.dueDate, app.status).text}</td>
+                                <td class="px-6 py-4 text-sm text-text-light max-w-xs truncate" title="${app.requirements || ''}">${app.requirements || 'N/A'}</td>
+                                <td class="px-6 py-4 text-right text-sm font-medium space-x-4">
+                                    <button class="text-brand-blue hover:text-dark-blue font-semibold transition-colors edit-app-btn" data-id="${app.id}">Edit</button>
+                                    <button class="text-red-600 hover:text-red-800 font-semibold transition-colors delete-app-btn" data-id="${app.id}">Delete</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                        </tbody>
+                    `;
+                    detailsCell.appendChild(nestedTable);
+
+                    groupRow.addEventListener('click', () => {
+                        groupRow.classList.toggle('expanded');
+                        detailsRow.classList.toggle('expanded');
+                    });
                 });
                 
-                if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-                
-                const result = await response.json();
-                
-                if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts[0]) {
-                    const parsedJson = JSON.parse(result.candidates[0].content.parts[0].text);
-                    if (!parsedJson.uniName || !parsedJson.courseAppliedFor) {
-                        alertUser("AI could not identify a university and course name. Please add manually.", "error");
-                        hideLoading();
-                        return;
-                    }
-                    
-                    const existingApp = currentApplications.find(app =>
-                        app.uniName.toLowerCase() === parsedJson.uniName.toLowerCase() &&
-                        app.courseAppliedFor.toLowerCase() === parsedJson.courseAppliedFor.toLowerCase()
-                    );
+                table.appendChild(tbody);
+                container.appendChild(table);
 
-                    if (existingApp) {
-                        showMergeConflictModal(existingApp, parsedJson);
-                    } else {
-                        alertUser("Information extracted! Please review and save.", "success");
-                        openModal(parsedJson, true); // true indicates this is a new entry
-                    }
-                } else { throw new Error("No valid content received from AI."); }
-            } catch (error) {
-                console.error("Error with Gemini API:", error);
-                alertUser("AI could not extract information. Please add manually.", "error");
-            } finally {
-                hideLoading();
+                container.querySelectorAll('.edit-app-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation(); 
+                        const app = currentApplications.find(a => a.id === e.target.dataset.id);
+                        if (app) openModal(app);
+                    });
+                });
+                container.querySelectorAll('.delete-app-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteApplication(e.target.dataset.id);
+                    });
+                });
             }
-        }
+            
+            function renderWishlist(items) {
+                wishlistDiv.innerHTML = '';
+                if (items.length > 0) {
+                    noWishlistText.style.display = 'none';
+                    items.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'wishlist-item flex items-center justify-between';
+                        
+                        const id = `wishlist-${item.id}`;
+                        div.innerHTML = `
+                            <input type="checkbox" id="${id}" class="hidden" ${item.researched ? 'checked' : ''}>
+                            <label for="${id}" class="flex items-center cursor-pointer text-text-dark w-full p-2 rounded-md hover:bg-light-gray">
+                                <span class="w-5 h-5 mr-3 rounded border-2 border-gray-300 flex items-center justify-center transition-all flex-shrink-0">
+                                    <svg class="w-3 h-3 text-white transform scale-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </span>
+                                <span class="transition-colors">${item.name}</span>
+                            </label>
+                            <button class="delete-wishlist-item text-gray-400 hover:text-red-500 transition-colors ml-2 p-1 flex-shrink-0">
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        `;
+                        div.querySelector('input').addEventListener('change', (e) => updateWishlistItem(item.id, e.target.checked));
+                        div.querySelector('.delete-wishlist-item').addEventListener('click', () => deleteWishlistItem(item.id));
+
+                        wishlistDiv.appendChild(div);
+                    });
+                } else {
+                    noWishlistText.style.display = 'block';
+                }
+            }
+            
+            function openConfirmModal(title, message, callback) { confirmModalTitle.textContent = title; confirmModalMessage.textContent = message; confirmCallback = callback; confirmModal.style.display = 'block'; }
+            function closeConfirmModal() { confirmModal.style.display = 'none'; confirmCallback = null; }
+            function alertUser(message, type = "info") {
+                const alertBox = document.createElement('div');
+                Object.assign(alertBox.style, { position: 'fixed', left: '50%', bottom: '20px', transform: 'translateX(-50%)', padding: '12px 20px', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', zIndex: '2000', fontSize: '14px', opacity: '0', color: 'white', transition: 'opacity 0.3s ease-in-out, bottom 0.3s ease-in-out', backgroundColor: type === 'success' ? '#4CAF50' : (type === 'error' ? '#F44336' : '#2196F3') });
+                alertBox.textContent = message;
+                document.body.appendChild(alertBox);
+                setTimeout(() => { alertBox.style.opacity = '1'; alertBox.style.bottom = '30px'; }, 10);
+                setTimeout(() => { alertBox.style.opacity = '0'; setTimeout(() => alertBox.remove(), 300); }, 3500);
+            }
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('is-visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.fade-in-section').forEach(section => observer.observe(section));
+            
+            window.addEventListener('scroll', () => {
+                mainHeader.classList.toggle('scrolled', window.scrollY > 10);
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navigateToTab(e.target.dataset.tab);
+                });
+            });
+
+            addApplicationBtn.addEventListener('click', () => openModal(null, true));
+            importBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileUpload);
+            downloadExcelBtn.addEventListener('click', downloadAsExcel);
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelModalBtn.addEventListener('click', closeModal);
+            
+            confirmCancelBtn.addEventListener('click', closeConfirmModal);
+            confirmOkBtn.addEventListener('click', () => {
+                if(confirmCallback) confirmCallback();
+                closeConfirmModal();
+            });
+            window.addEventListener('click', (e) => {
+                if (e.target === applicationModal) closeModal();
+                if (e.target === confirmModal) closeConfirmModal();
+                if (e.target === mergeConflictModal) closeMergeConflictModal();
+            });
+            
+            // --- New File Import & Merge Functions ---
+            
+            function handleFileUpload(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                showLoading();
+                const fileExtension = file.name.split('.').pop().toLowerCase();
+                if (fileExtension === 'xlsx') parseExcelDoc(file);
+                else if (fileExtension === 'docx') parseWordDoc(file);
+                else {
+                    alertUser("Unsupported file type. Please upload .xlsx or .docx files.", "error");
+                    hideLoading();
+                }
+                event.target.value = '';
+            }
+
+            function parseExcelDoc(file) {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, {type: 'array'});
+                        const textContent = workbook.SheetNames.map(name => {
+                            const ws = workbook.Sheets[name];
+                            return XLSX.utils.sheet_to_json(ws, { header: 1 }).map(row => row.join(' ')).join('\n');
+                        }).join('\n\n');
+                        await extractInfoWithGemini(textContent);
+                    } catch (error) {
+                        console.error("Error parsing Excel file:", error);
+                        alertUser("Could not parse the Excel file.", "error");
+                        hideLoading();
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            }
+
+            async function parseWordDoc(file) {
+                 try {
+                    const result = await docx.readArrayBuffer(file);
+                    await extractInfoWithGemini(result.value);
+                } catch (error) {
+                    console.error("Error parsing Word file:", error);
+                    alertUser("Could not parse the Word file.", "error");
+                    hideLoading();
+                }
+            }
+            
+            function closeMergeConflictModal() {
+                 mergeConflictModal.style.display = 'none';
+            }
+
+            function showMergeConflictModal(existingApp, importedData) {
+                function renderData(container, data) {
+                    container.innerHTML = `
+                        <p><strong>Course:</strong> ${data.courseAppliedFor || 'N/A'}</p>
+                        <p><strong>Status:</strong> ${data.status || 'N/A'}</p>
+                        <p><strong>Due Date:</strong> ${data.dueDate || 'N/A'}</p>
+                        <p><strong>Requirements:</strong> ${data.requirements || 'N/A'}</p>
+                    `;
+                }
+
+                renderData(existingDataContainer, existingApp);
+                renderData(importedDataContainer, importedData);
+                
+                keepExistingBtn.onclick = closeMergeConflictModal;
+                updateWithImportedBtn.onclick = async () => {
+                    showLoading();
+                    try {
+                        await setDoc(doc(applicationsCollectionRef, existingApp.id), importedData, { merge: true });
+                        alertUser("Application updated successfully!", "success");
+                    } catch(e) {
+                         alertUser("Failed to update application.", "error");
+                    } finally {
+                        closeMergeConflictModal();
+                        hideLoading();
+                    }
+                };
+
+                mergeConflictModal.style.display = 'block';
+            }
+
+
+            async function extractInfoWithGemini(text) {
+                alertUser("AI is analyzing your document...", "info");
+                
+                const prompt = `From the following text, extract the university name, course name, application deadline, and a summary of requirements. The keys should be "uniName", "courseAppliedFor", "dueDate", and "requirements". Format the deadline as<x_bin_660>-MM-dd. If info is missing, use an empty string. Text: \n\n${text}`;
+                
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { 
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                "uniName": { "type": "STRING" },
+                                "courseAppliedFor": { "type": "STRING" },
+                                "dueDate": { "type": "STRING", "description": "Date in<x_bin_660>-MM-dd format" },
+                                "requirements": { "type": "STRING" }
+                            },
+                        }
+                    }
+                };
+
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+                    
+                    const result = await response.json();
+                    
+                    if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts[0]) {
+                        const parsedJson = JSON.parse(result.candidates[0].content.parts[0].text);
+                        if (!parsedJson.uniName || !parsedJson.courseAppliedFor) {
+                            alertUser("AI could not identify a university and course name. Please add manually.", "error");
+                            hideLoading();
+                            return;
+                        }
+                        
+                        const existingApp = currentApplications.find(app =>
+                            app.uniName.toLowerCase() === parsedJson.uniName.toLowerCase() &&
+                            app.courseAppliedFor.toLowerCase() === parsedJson.courseAppliedFor.toLowerCase()
+                        );
+
+                        if (existingApp) {
+                            showMergeConflictModal(existingApp, parsedJson);
+                        } else {
+                            alertUser("Information extracted! Please review and save.", "success");
+                            openModal(parsedJson, true); // true indicates this is a new entry
+                        }
+                    } else { throw new Error("No valid content received from AI."); }
+                } catch (error) {
+                    console.error("Error with Gemini API:", error);
+                    alertUser("AI could not extract information. Please add manually.", "error");
+                } finally {
+                    hideLoading();
+                }
+            }
+        };
 
     </script>
 </body>
