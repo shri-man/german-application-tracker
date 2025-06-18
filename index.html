@@ -180,17 +180,9 @@
             </div>
 
             <div class="container mx-auto px-6 -mt-20">
-                <div class="grid md:grid-cols-2 gap-8">
-                    <!-- Preparing Section -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg fade-in-section">
-                        <h3 class="text-2xl font-bold text-text-dark">Currently in Preparation</h3>
-                        <p class="text-text-light mt-1 mb-6">Focus on these applications first.</p>
-                        <div id="preparingList" class="space-y-3">
-                            <p id="noPreparingText" class="text-text-light">No applications are currently in the "Preparing" stage.</p>
-                        </div>
-                    </div>
+                <div class="flex justify-center">
                     <!-- Wishlist Section -->
-                    <div class="bg-white p-8 rounded-xl shadow-lg fade-in-section">
+                    <div class="w-full md:w-2/3 lg:w-1/2 bg-white p-8 rounded-xl shadow-lg fade-in-section">
                         <h3 class="text-2xl font-bold text-text-dark">University Wishlist</h3>
                         <p class="text-text-light mt-1 mb-6">Quickly add universities you want to research.</p>
                         <form id="wishlistForm" class="flex gap-2 mb-4">
@@ -239,8 +231,30 @@
                         </button>
                     </div>
                 </div>
-                <div id="applicationsTableContainer" class="bg-white rounded-xl overflow-x-auto">
-                    <!-- Table will be rendered here by JS -->
+                <div class="space-y-12">
+                    <!-- Preparing Section -->
+                    <section id="preparingSection">
+                        <h3 class="text-2xl font-bold text-text-dark mb-4 border-b pb-2">Preparing</h3>
+                        <div id="preparingTableContainer" class="bg-white rounded-xl overflow-x-auto">
+                            <!-- Table for preparing apps -->
+                        </div>
+                    </section>
+
+                    <!-- Accepted/Rejected Section -->
+                    <section id="decidedSection">
+                        <h3 class="text-2xl font-bold text-text-dark mb-4 border-b pb-2">Accepted / Rejected</h3>
+                        <div id="decidedTableContainer" class="bg-white rounded-xl overflow-x-auto">
+                            <!-- Table for decided apps -->
+                        </div>
+                    </section>
+
+                    <!-- Applied/Not Applied Section -->
+                    <section id="pendingSection">
+                        <h3 class="text-2xl font-bold text-text-dark mb-4 border-b pb-2">Applied / Not Applied</h3>
+                        <div id="pendingTableContainer" class="bg-white rounded-xl overflow-x-auto">
+                            <!-- Table for pending apps -->
+                        </div>
+                    </section>
                 </div>
             </div>
         </section>
@@ -367,7 +381,6 @@
         const closeModalBtn = document.getElementById('closeModalBtn');
         const cancelModalBtn = document.getElementById('cancelModalBtn');
         const applicationForm = document.getElementById('applicationForm');
-        const applicationsTableContainer = document.getElementById('applicationsTableContainer');
         const modalTitle = document.getElementById('modalTitle');
         const applicationIdInput = document.getElementById('applicationId');
         const loadingSpinner = document.getElementById('loadingSpinner');
@@ -384,12 +397,19 @@
         const keepExistingBtn = document.getElementById('keepExistingBtn');
         const updateWithImportedBtn = document.getElementById('updateWithImportedBtn');
 
+        // New Homepage elements
         const preparingList = document.getElementById('preparingList');
         const noPreparingText = document.getElementById('noPreparingText');
         const wishlistDiv = document.getElementById('wishlist');
         const wishlistForm = document.getElementById('wishlistForm');
         const wishlistInput = document.getElementById('wishlistInput');
         const noWishlistText = document.getElementById('noWishlistText');
+        
+        // New Application Section Containers
+        const preparingTableContainer = document.getElementById('preparingTableContainer');
+        const decidedTableContainer = document.getElementById('decidedTableContainer');
+        const pendingTableContainer = document.getElementById('pendingTableContainer');
+
 
         function showLoginPage() {
             loginPage.style.display = 'flex';
@@ -465,8 +485,7 @@
             const qApps = query(applicationsCollectionRef, orderBy("uniName", "asc"), orderBy("courseAppliedFor", "asc"));
             unsubscribeApplications = onSnapshot(qApps, (querySnapshot) => {
                 currentApplications = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderApplications(currentApplications);
-                renderPreparingList(currentApplications);
+                renderAllApplicationSections(currentApplications);
                 hideLoading();
             }, (error) => {
                 console.error("Firestore snapshot error (Applications): ", error);
@@ -503,14 +522,13 @@
 
         function openModal(appData = null, isNew = false) {
             applicationForm.reset();
-            applicationIdInput.value = ''; // Always clear ID
+            applicationIdInput.value = '';
             modalTitle.textContent = 'Add New Application';
             if (appData) {
-                if (!isNew) { // If it's an existing app to edit
+                if (!isNew) {
                     modalTitle.textContent = 'Edit Application';
                     applicationIdInput.value = appData.id;
                 }
-                // Pre-fill form for both edits and new-from-import
                 document.getElementById('uniName').value = appData.uniName || '';
                 document.getElementById('courseAppliedFor').value = appData.courseAppliedFor || '';
                 document.getElementById('status').value = appData.status || 'Preparing';
@@ -616,9 +634,18 @@
             return { text: `${diffDays} days`, colorClass: 'text-green-600' };
         }
         
-        // --- RENDER FUNCTIONS (with Grouping) ---
-        function renderApplications(applications) {
-            applicationsTableContainer.innerHTML = '';
+        function renderAllApplicationSections(applications) {
+            const preparingApps = applications.filter(app => app.status === 'Preparing');
+            const decidedApps = applications.filter(app => ['Accepted', 'Rejected', 'Waitlisted'].includes(app.status));
+            const pendingApps = applications.filter(app => ['Applied', 'Not Applied'].includes(app.status));
+
+            renderTableSection(preparingTableContainer, preparingApps);
+            renderTableSection(decidedTableContainer, decidedApps);
+            renderTableSection(pendingTableContainer, pendingApps);
+        }
+
+        function renderTableSection(container, applications) {
+            container.innerHTML = '';
             
             const groupedApps = applications.reduce((acc, app) => {
                 const uniName = app.uniName || 'Unnamed University';
@@ -628,12 +655,7 @@
             }, {});
 
             if (Object.keys(groupedApps).length === 0) {
-                 applicationsTableContainer.innerHTML = `
-                    <table class="min-w-full">
-                        <tbody>
-                            <tr><td colspan="6" class="px-6 py-16 text-center text-text-light"><p class="font-semibold text-lg">Your dashboard is empty.</p><p class="mt-1">Click "Add Application" to get started.</p></td></tr>
-                        </tbody>
-                    </table>`;
+                 container.innerHTML = `<div class="px-6 py-8 text-center text-text-light"><p>No applications in this section.</p></div>`;
                  return;
             }
 
@@ -677,9 +699,7 @@
                 const nestedTable = document.createElement('table');
                 nestedTable.className = 'min-w-full';
                 nestedTable.innerHTML = `
-                    <thead class="sr-only">
-                        <tr><th>Course</th><th>Status</th><th>Due Date</th><th>Countdown</th><th>Requirements</th><th>Actions</th></tr>
-                    </thead>
+                    <thead class="sr-only"><tr><th>Course</th><th>Status</th><th>Due Date</th><th>Countdown</th><th>Requirements</th><th>Actions</th></tr></thead>
                     <tbody class="divide-y divide-gray-200">
                     ${apps.map(app => `
                         <tr class="bg-light-gray/50 hover:bg-light-gray">
@@ -705,19 +725,18 @@
             });
             
             table.appendChild(tbody);
-            applicationsTableContainer.appendChild(table);
+            container.appendChild(table);
 
-            // Add event listeners for the new buttons
-            document.querySelectorAll('.edit-app-btn').forEach(btn => {
+            container.querySelectorAll('.edit-app-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // prevent group row click
+                    e.stopPropagation(); 
                     const app = currentApplications.find(a => a.id === e.target.dataset.id);
                     if (app) openModal(app);
                 });
             });
-            document.querySelectorAll('.delete-app-btn').forEach(btn => {
+            container.querySelectorAll('.delete-app-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    e.stopPropagation(); // prevent group row click
+                    e.stopPropagation();
                     deleteApplication(e.target.dataset.id);
                 });
             });
@@ -902,7 +921,7 @@
         async function extractInfoWithGemini(text) {
             alertUser("AI is analyzing your document...", "info");
             
-            const prompt = `From the following text, extract the university name, course name, application deadline, and a summary of requirements. The keys should be "uniName", "courseAppliedFor", "dueDate", and "requirements". Format the deadline as yyyy-MM-dd. If info is missing, use an empty string. Text: \n\n${text}`;
+            const prompt = `From the following text, extract the university name, course name, application deadline, and a summary of requirements. The keys should be "uniName", "courseAppliedFor", "dueDate", and "requirements". Format the deadline as<x_bin_660>-MM-dd. If info is missing, use an empty string. Text: \n\n${text}`;
             
             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
             const payload = { 
@@ -914,7 +933,7 @@
                         properties: {
                             "uniName": { "type": "STRING" },
                             "courseAppliedFor": { "type": "STRING" },
-                            "dueDate": { "type": "STRING", "description": "Date in yyyy-MM-dd format" },
+                            "dueDate": { "type": "STRING", "description": "Date in<x_bin_660>-MM-dd format" },
                             "requirements": { "type": "STRING" }
                         },
                     }
@@ -966,3 +985,6 @@
     </script>
 </body>
 </html>
+" of the immersive. I will provide a response based on the code in the selection.
+what is this code about?
+I want to use this for my usa university applications, what changes do i need to m
