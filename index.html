@@ -689,7 +689,6 @@
                 return { text: 'Decided', colorClass: 'text-text-light' };
             }
 
-            // Helper to create a date object from YYYY-MM-DD string in UTC
             const parseDate = (dateString) => {
                 if (!dateString) return null;
                 const parts = dateString.split('-');
@@ -699,7 +698,6 @@
             const fromDate = parseDate(deadlineFromString);
             const toDate = parseDate(deadlineToStrin);
 
-            // If the application period hasn't started yet
             if (fromDate && today < fromDate) {
                 const diffTime = fromDate.getTime() - today.getTime();
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -707,7 +705,6 @@
                 return { text: `Starts in ${diffDays} days`, colorClass: 'text-green-600 font-semibold' };
             }
 
-            // If the application period is active or has passed
             if (toDate) {
                 const diffTime = toDate.getTime() - today.getTime();
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
