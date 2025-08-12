@@ -175,7 +175,7 @@
                 <div class="container mx-auto px-6 pt-24 pb-32 text-center">
                     <h1 class="text-5xl md:text-7xl font-black text-text-dark tracking-tighter">Your Path to Germany.</h1>
                     <h2 class="text-5xl md:text-7xl font-black text-brand-blue tracking-tighter mt-2">Perfectly Organized.</h2>
-                    <p class="mt-8 text-lg max-w-2xl mx-auto text-text-light">Stop juggling spreadsheets and notes. UniTrack is the clean, simple, and powerful way to manage your university applications, so you can focus on what matters most.</p>
+                    <p class="mt-8 text-lg max-w-2xl mx-auto text-text-light">Stop juggling spreadsheets and notes.UniTrack is the clean, simple, and powerful way to manage your university applications, so you can focus on what matters most.</p>
                 </div>
             </div>
 
@@ -290,8 +290,11 @@
                             <option>Accepted</option><option>Rejected</option><option>Waitlisted</option>
                         </select>
                     </div>
-                    <div>
-                        <!-- This space is now empty, date fields are below -->
+                    <div class="flex items-end pb-1">
+                        <div class="flex items-center">
+                            <input id="vpdNeeded" name="vpdNeeded" type="checkbox" class="h-4 w-4 text-brand-blue focus:ring-brand-blue border-gray-300 rounded">
+                            <label for="vpdNeeded" class="ml-2 block text-sm text-text-dark">VPD Needed</label>
+                        </div>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -442,7 +445,7 @@
         const decidedTableContainer = document.getElementById('decidedTableContainer');
         const pendingTableContainer = document.getElementById('pendingTableContainer');
 
-        // NEW: Requirements Modal Elements
+        // Requirements Modal Elements
         const requirementsModal = document.getElementById('requirementsModal');
         const requirementsModalTitle = document.getElementById('requirementsModalTitle');
         const requirementsModalInfo = document.getElementById('requirementsModalInfo');
@@ -580,6 +583,7 @@
                 document.getElementById('status').value = appData.status || 'Preparing';
                 document.getElementById('deadlineFrom').value = appData.deadlineFrom || '';
                 document.getElementById('deadlineTo').value = appData.deadlineTo || '';
+                document.getElementById('vpdNeeded').checked = appData.vpdNeeded || false;
             }
             applicationModal.style.display = 'block';
         }
@@ -597,19 +601,19 @@
                 status: document.getElementById('status').value,
                 deadlineFrom: document.getElementById('deadlineFrom').value,
                 deadlineTo: document.getElementById('deadlineTo').value,
+                vpdNeeded: document.getElementById('vpdNeeded').checked,
                 updatedAt: serverTimestamp()
             };
 
-            // Only add requirements on creation, not on every edit from this modal.
             if (!id) {
-                 applicationData.requirements = ''; // Initialize with empty string
+                 applicationData.requirements = '';
+                 applicationData.createdAt = serverTimestamp();
             }
 
             try {
                 if (id) {
                     await setDoc(doc(applicationsCollectionRef, id), applicationData, { merge: true });
                 } else {
-                    applicationData.createdAt = serverTimestamp();
                     await addDoc(applicationsCollectionRef, applicationData);
                 }
                 alertUser("Application saved!", "success");
@@ -662,6 +666,7 @@
                 "University Name": app.uniName,
                 "Course Applied For": app.courseAppliedFor,
                 "Status": app.status,
+                "VPD Needed": app.vpdNeeded ? "Yes" : "No",
                 "Deadline From": app.deadlineFrom,
                 "Deadline Until": app.deadlineTo,
                 "Special Requirements": app.requirements
@@ -676,26 +681,48 @@
             XLSX.writeFile(workbook, "My_UniTrack_Applications.xlsx");
         }
         
-        function getDaysRemaining(deadlineToDateString, status) {
-            if (!deadlineToDateString) return { text: 'N/A', colorClass: 'text-text-light' };
+        function getDaysRemaining(deadlineFromString, deadlineToString, status) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const dateParts = deadlineToDateString.split('-').map(part => parseInt(part, 10));
-            const dueDate = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
-            if (isNaN(dueDate.getTime())) return { text: 'Invalid Date', colorClass: 'text-text-light' };
-            const diffTime = dueDate.getTime() - today.getTime();
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            
+
             if (['Applied', 'Accepted', 'Rejected', 'Waitlisted'].includes(status)) {
                 return { text: 'Decided', colorClass: 'text-text-light' };
             }
 
-            if (diffDays < 0) {
-                return { text: status === 'Not Applied' ? 'Deadline Passed' : `${Math.abs(diffDays)} days overdue`, colorClass: 'text-red-600 font-semibold' };
+            // Helper to create a date object from YYYY-MM-DD string in UTC
+            const parseDate = (dateString) => {
+                if (!dateString) return null;
+                const parts = dateString.split('-');
+                return new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+            };
+
+            const fromDate = parseDate(deadlineFromString);
+            const toDate = parseDate(deadlineToStrin);
+
+            // If the application period hasn't started yet
+            if (fromDate && today < fromDate) {
+                const diffTime = fromDate.getTime() - today.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays === 1) return { text: `Starts in 1 day`, colorClass: 'text-green-600 font-semibold' };
+                return { text: `Starts in ${diffDays} days`, colorClass: 'text-green-600 font-semibold' };
             }
-            if (diffDays === 0) return { text: 'Due today', colorClass: 'text-orange-500 font-semibold' };
-            if (diffDays <= 7) return { text: `${diffDays} days`, colorClass: 'text-yellow-600 font-semibold' };
-            return { text: `${diffDays} days`, colorClass: 'text-green-600' };
+
+            // If the application period is active or has passed
+            if (toDate) {
+                const diffTime = toDate.getTime() - today.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                if (diffDays < 0) {
+                    return { text: status === 'Not Applied' ? 'Deadline Passed' : `Overdue by ${Math.abs(diffDays)} days`, colorClass: 'text-brand-red font-semibold' };
+                }
+                if (diffDays === 0) {
+                    return { text: 'Ends Today!', colorClass: 'text-brand-red font-bold' };
+                }
+                if (diffDays === 1) return { text: `Ends in 1 day`, colorClass: 'text-red-500 font-semibold' };
+                return { text: `Ends in ${diffDays} days`, colorClass: 'text-red-500 font-semibold' };
+            }
+
+            return { text: 'N/A', colorClass: 'text-text-light' };
         }
         
         function renderAllApplicationSections(applications) {
@@ -762,23 +789,23 @@
                 
                 const nestedTable = document.createElement('table');
                 nestedTable.className = 'min-w-full';
-
-                const deadlineHeader = ['Preparing', 'Not Applied'].some(status => apps.some(app => app.status === status)) ? 'Deadline' : 'Date';
                 
                 nestedTable.innerHTML = `
-                    <thead class="sr-only"><tr><th>Course</th><th>Status</th><th>${deadlineHeader}</th><th>Countdown</th><th>Requirements</th><th>Actions</th></tr></thead>
+                    <thead class="sr-only"><tr><th>Course</th><th>Status</th><th>Deadline</th><th>Countdown</th><th>Requirements</th><th>Actions</th></tr></thead>
                     <tbody class="divide-y divide-gray-200">
                     ${apps.map(app => {
                         const fromDate = app.deadlineFrom ? new Date(app.deadlineFrom + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'N/A';
                         const untilDate = app.deadlineTo ? new Date(app.deadlineTo + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
                         const deadlineText = app.deadlineFrom && app.deadlineTo ? `${fromDate} - ${untilDate}` : (app.deadlineTo || 'N/A');
-                        
+                        const countdown = getDaysRemaining(app.deadlineFrom, app.deadlineTo, app.status);
+                        const vpdStatusHtml = app.vpdNeeded ? `<span class="font-bold text-brand-red ml-2">(VPD Needed)</span>` : '';
+
                         return `
                         <tr class="bg-light-gray/50 hover:bg-light-gray">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-text-dark w-1/4">${app.courseAppliedFor || ''}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-text-dark w-1/4">${app.courseAppliedFor || ''} ${vpdStatusHtml}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${app.status || 'N/A'}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${deadlineText}</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm ${getDaysRemaining(app.deadlineTo, app.status).colorClass}">${getDaysRemaining(app.deadlineTo, app.status).text}</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm ${countdown.colorClass}">${countdown.text}</td>
                             <td class="px-6 py-4 text-sm text-text-light">
                                 <button class="font-semibold text-brand-blue hover:text-dark-blue transition-colors view-reqs-btn" data-id="${app.id}">View / Edit</button>
                             </td>
@@ -814,7 +841,6 @@
                     deleteApplication(e.target.dataset.id);
                 });
             });
-            // NEW: Listener for the requirements button
             container.querySelectorAll('.view-reqs-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -900,7 +926,7 @@
             if (e.target === applicationModal) closeModal();
             if (e.target === confirmModal) closeConfirmModal();
             if (e.target === mergeConflictModal) closeMergeConflictModal();
-            if (e.target === requirementsModal) closeRequirementsModal(); // NEW
+            if (e.target === requirementsModal) closeRequirementsModal();
         });
         
         // --- File Import & Merge Functions ---
@@ -959,6 +985,7 @@
                 container.innerHTML = `
                     <p><strong>Course:</strong> ${data.courseAppliedFor || 'N/A'}</p>
                     <p><strong>Status:</strong> ${data.status || 'N/A'}</p>
+                    <p><strong>VPD Needed:</strong> ${data.vpdNeeded ? 'Yes' : 'No'}</p>
                     <p><strong>Deadline From:</strong> ${data.deadlineFrom || 'N/A'}</p>
                     <p><strong>Deadline To:</strong> ${data.deadlineTo || 'N/A'}</p>
                     <p><strong>Requirements:</strong> ${data.requirements || 'N/A'}</p>
@@ -988,7 +1015,7 @@
         async function extractInfoWithGemini(text) {
             alertUser("AI is analyzing your document...", "info");
             
-            const prompt = `From the following text, extract the university name, course name, application deadline start and end dates, and a summary of requirements. The keys must be "uniName", "courseAppliedFor", "deadlineFrom", "deadlineTo", and "requirements". Format ALL dates as YYYY-MM-DD. If a start or end date is not mentioned, use an empty string for that key. Text: \n\n${text}`;
+            const prompt = `From the following text, extract the university name, course name, application deadline start and end dates, whether a VPD is needed, and a summary of requirements. The keys must be "uniName", "courseAppliedFor", "deadlineFrom", "deadlineTo", "vpdNeeded", and "requirements". The vpdNeeded key should be a boolean. Format ALL dates as YYYY-MM-DD. If info is missing, use an empty string or false. Text: \n\n${text}`;
             
             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
             const payload = { 
@@ -1002,6 +1029,7 @@
                             "courseAppliedFor": { "type": "STRING" },
                             "deadlineFrom": { "type": "STRING", "description": "Date in YYYY-MM-DD format" },
                             "deadlineTo": { "type": "STRING", "description": "Date in YYYY-MM-DD format" },
+                            "vpdNeeded": { "type": "BOOLEAN" },
                             "requirements": { "type": "STRING" }
                         },
                     }
@@ -1039,7 +1067,7 @@
                         showMergeConflictModal(existingApp, parsedJson);
                     } else {
                         alertUser("Information extracted! Please review and save.", "success");
-                        openModal(parsedJson, true); // true indicates this is a new entry
+                        openModal(parsedJson, true);
                     }
                 } else { throw new Error("No valid content received from AI."); }
             } catch (error) {
@@ -1050,7 +1078,7 @@
             }
         }
 
-        // --- NEW: Requirements Modal Functions ---
+        // --- Requirements Modal Functions ---
 
         function openRequirementsModal(app) {
             requirementsModalTitle.textContent = `Requirements for ${app.courseAppliedFor}`;
