@@ -132,7 +132,7 @@
 
     <!-- Login Page -->
     <section id="loginPage" class="flex flex-col items-center justify-center min-h-screen bg-light-gray p-4">
-        <div class="w-full max-w-sm p-8 space-y-8 bg-white rounded-xl">
+        <div class="w-full max-w-sm p-8 space-y-8 bg-white rounded-xl shadow-lg">
             <div class="text-center">
                 <h1 class="text-4xl font-black text-text-dark">UniTrack</h1>
                 <p class="mt-2 text-text-light">Your journey, organized.</p>
@@ -218,13 +218,13 @@
                     </div>
                     <div class="flex items-center gap-4 mt-6 sm:mt-0">
                          <button id="importBtn" class="bg-gray-100 text-text-dark font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center space-x-2">
-                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                            <span>Import</span>
-                        </button>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                             <span>Import</span>
+                         </button>
                          <button id="downloadExcelBtn" class="bg-gray-100 text-text-dark font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            <span>Download</span>
-                        </button>
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                             <span>Download</span>
+                         </button>
                         <button id="addApplicationBtn" class="bg-black text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-300 flex items-center space-x-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                             <span>Add Application</span>
@@ -291,13 +291,25 @@
                         </select>
                     </div>
                     <div>
-                        <label for="dueDate" class="block text-sm font-medium text-text-light mb-1">Due Date</label>
-                        <input type="date" id="dueDate" name="dueDate" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition">
+                        <!-- This space is now empty, date fields are below -->
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="deadlineFrom" class="block text-sm font-medium text-text-light mb-1">Deadline From</label>
+                        <input type="date" id="deadlineFrom" name="deadlineFrom" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition">
+                    </div>
+                    <div>
+                        <label for="deadlineTo" class="block text-sm font-medium text-text-light mb-1">Deadline Until</label>
+                        <input type="date" id="deadlineTo" name="deadlineTo" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition">
                     </div>
                 </div>
                 <div>
-                    <label for="requirements" class="block text-sm font-medium text-text-light mb-1">Special Requirements</label>
-                    <textarea id="requirements" name="requirements" rows="3" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition" placeholder="e.g., APS certificate, Language proficiency..."></textarea>
+                    <label class="block text-sm font-medium text-text-light mb-1">Special Requirements</label>
+                    <p class="text-xs text-gray-500 mb-2">Click "View / Edit" in the table to manage requirements.</p>
+                    <div id="requirementsPreview" class="w-full px-4 py-2 bg-gray-100 border-transparent rounded-md text-gray-500 h-20 overflow-y-auto">
+                        A dedicated editor is available after saving.
+                    </div>
                 </div>
                 <div class="mt-6 flex justify-end space-x-3">
                     <button type="button" id="cancelModalBtn" class="px-5 py-2 text-sm font-semibold text-text-light bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">Cancel</button>
@@ -331,9 +343,32 @@
                  </div>
              </div>
              <div class="mt-8 flex justify-end space-x-3">
-                 <button id="keepExistingBtn" class="px-5 py-2 text-sm font-semibold text-text-light bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">Keep Existing</button>
-                 <button id="updateWithImportedBtn" class="px-5 py-2 text-sm font-semibold text-white bg-brand-blue rounded-md hover:bg-dark-blue transition-colors">Update with Imported</button>
+                <button id="keepExistingBtn" class="px-5 py-2 text-sm font-semibold text-text-light bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">Keep Existing</button>
+                <button id="updateWithImportedBtn" class="px-5 py-2 text-sm font-semibold text-white bg-brand-blue rounded-md hover:bg-dark-blue transition-colors">Update with Imported</button>
+             </div>
+         </div>
+    </div>
+
+    <!-- NEW: Requirements Modal -->
+    <div id="requirementsModal" class="modal">
+        <div class="modal-content max-w-xl">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h3 id="requirementsModalTitle" class="text-2xl font-bold text-text-dark">Edit Requirements</h3>
+                    <p id="requirementsModalInfo" class="text-text-light mt-1"></p>
+                </div>
+                <button id="closeRequirementsModalBtn" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
+            <form id="requirementsForm">
+                <input type="hidden" id="requirementsAppId">
+                <textarea id="requirementsText" name="requirements" rows="12" class="w-full px-4 py-2 bg-light-gray border-transparent rounded-md focus:ring-2 focus:ring-brand-yellow focus:border-transparent transition" placeholder="e.g., APS certificate, Language proficiency, Letter of Motivation..."></textarea>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button type="button" id="cancelRequirementsBtn" class="px-5 py-2 text-sm font-semibold text-text-light bg-gray-200 rounded-md hover:bg-gray-300 transition-colors">Cancel</button>
+                    <button type="submit" id="saveRequirementsBtn" class="px-5 py-2 text-sm font-semibold text-white bg-text-dark rounded-md hover:bg-black transition-colors">Save Requirements</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -344,6 +379,7 @@
         import { getFirestore, doc, collection, addDoc, setDoc, deleteDoc, onSnapshot, query, serverTimestamp, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
+            // Your Firebase config remains here
             apiKey: "AIzaSyDmAlSmn_dvqJ93HJTVQcsf09Iihrj8DxM",
             authDomain: "my-uni-tracker.firebaseapp.com",
             projectId: "my-uni-tracker",
@@ -397,18 +433,25 @@
         const keepExistingBtn = document.getElementById('keepExistingBtn');
         const updateWithImportedBtn = document.getElementById('updateWithImportedBtn');
 
-        // New Homepage elements
-        const preparingList = document.getElementById('preparingList');
-        const noPreparingText = document.getElementById('noPreparingText');
         const wishlistDiv = document.getElementById('wishlist');
         const wishlistForm = document.getElementById('wishlistForm');
         const wishlistInput = document.getElementById('wishlistInput');
         const noWishlistText = document.getElementById('noWishlistText');
         
-        // New Application Section Containers
         const preparingTableContainer = document.getElementById('preparingTableContainer');
         const decidedTableContainer = document.getElementById('decidedTableContainer');
         const pendingTableContainer = document.getElementById('pendingTableContainer');
+
+        // NEW: Requirements Modal Elements
+        const requirementsModal = document.getElementById('requirementsModal');
+        const requirementsModalTitle = document.getElementById('requirementsModalTitle');
+        const requirementsModalInfo = document.getElementById('requirementsModalInfo');
+        const closeRequirementsModalBtn = document.getElementById('closeRequirementsModalBtn');
+        const requirementsForm = document.getElementById('requirementsForm');
+        const requirementsAppId = document.getElementById('requirementsAppId');
+        const requirementsText = document.getElementById('requirementsText');
+        const cancelRequirementsBtn = document.getElementById('cancelRequirementsBtn');
+        const saveRequirementsBtn = document.getElementById('saveRequirementsBtn');
 
 
         function showLoginPage() {
@@ -523,17 +566,20 @@
         function openModal(appData = null, isNew = false) {
             applicationForm.reset();
             applicationIdInput.value = '';
+            document.getElementById('requirementsPreview').textContent = 'A dedicated editor is available after saving.';
             modalTitle.textContent = 'Add New Application';
             if (appData) {
                 if (!isNew) {
                     modalTitle.textContent = 'Edit Application';
                     applicationIdInput.value = appData.id;
+                    const preview = document.getElementById('requirementsPreview');
+                    preview.textContent = appData.requirements || 'No requirements specified. Click "View / Edit" in the table to add some.';
                 }
                 document.getElementById('uniName').value = appData.uniName || '';
                 document.getElementById('courseAppliedFor').value = appData.courseAppliedFor || '';
                 document.getElementById('status').value = appData.status || 'Preparing';
-                document.getElementById('dueDate').value = appData.dueDate || '';
-                document.getElementById('requirements').value = appData.requirements || '';
+                document.getElementById('deadlineFrom').value = appData.deadlineFrom || '';
+                document.getElementById('deadlineTo').value = appData.deadlineTo || '';
             }
             applicationModal.style.display = 'block';
         }
@@ -549,13 +595,20 @@
                 uniName: document.getElementById('uniName').value.trim(),
                 courseAppliedFor: document.getElementById('courseAppliedFor').value.trim(),
                 status: document.getElementById('status').value,
-                dueDate: document.getElementById('dueDate').value,
-                requirements: document.getElementById('requirements').value.trim(),
+                deadlineFrom: document.getElementById('deadlineFrom').value,
+                deadlineTo: document.getElementById('deadlineTo').value,
                 updatedAt: serverTimestamp()
             };
+
+            // Only add requirements on creation, not on every edit from this modal.
+            if (!id) {
+                 applicationData.requirements = ''; // Initialize with empty string
+            }
+
             try {
-                if (id) await setDoc(doc(applicationsCollectionRef, id), applicationData, { merge: true });
-                else {
+                if (id) {
+                    await setDoc(doc(applicationsCollectionRef, id), applicationData, { merge: true });
+                } else {
                     applicationData.createdAt = serverTimestamp();
                     await addDoc(applicationsCollectionRef, applicationData);
                 }
@@ -563,7 +616,9 @@
                 closeModal();
             } catch (error) {
                 alertUser(`Error saving application: ${error.message}`, "error");
-            } finally { hideLoading(); }
+            } finally {
+                hideLoading();
+            }
         });
 
         async function deleteApplication(id) {
@@ -604,8 +659,12 @@
         function downloadAsExcel() {
             if (currentApplications.length === 0) return alertUser('No applications to download.', 'info');
             const dataToExport = currentApplications.map(app => ({
-                "University Name": app.uniName, "Course Applied For": app.courseAppliedFor, "Status": app.status,
-                "Due Date": app.dueDate, "Special Requirements": app.requirements
+                "University Name": app.uniName,
+                "Course Applied For": app.courseAppliedFor,
+                "Status": app.status,
+                "Deadline From": app.deadlineFrom,
+                "Deadline Until": app.deadlineTo,
+                "Special Requirements": app.requirements
             }));
             const worksheet = XLSX.utils.json_to_sheet(dataToExport);
             const workbook = XLSX.utils.book_new();
@@ -617,15 +676,20 @@
             XLSX.writeFile(workbook, "My_UniTrack_Applications.xlsx");
         }
         
-        function getDaysRemaining(dueDateString, status) {
-            if (!dueDateString) return { text: 'N/A', colorClass: 'text-text-light' };
+        function getDaysRemaining(deadlineToDateString, status) {
+            if (!deadlineToDateString) return { text: 'N/A', colorClass: 'text-text-light' };
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const dateParts = dueDateString.split('-').map(part => parseInt(part, 10));
+            const dateParts = deadlineToDateString.split('-').map(part => parseInt(part, 10));
             const dueDate = new Date(Date.UTC(dateParts[0], dateParts[1] - 1, dateParts[2]));
             if (isNaN(dueDate.getTime())) return { text: 'Invalid Date', colorClass: 'text-text-light' };
             const diffTime = dueDate.getTime() - today.getTime();
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (['Applied', 'Accepted', 'Rejected', 'Waitlisted'].includes(status)) {
+                return { text: 'Decided', colorClass: 'text-text-light' };
+            }
+
             if (diffDays < 0) {
                 return { text: status === 'Not Applied' ? 'Deadline Passed' : `${Math.abs(diffDays)} days overdue`, colorClass: 'text-red-600 font-semibold' };
             }
@@ -698,22 +762,32 @@
                 
                 const nestedTable = document.createElement('table');
                 nestedTable.className = 'min-w-full';
+
+                const deadlineHeader = ['Preparing', 'Not Applied'].some(status => apps.some(app => app.status === status)) ? 'Deadline' : 'Date';
+                
                 nestedTable.innerHTML = `
-                    <thead class="sr-only"><tr><th>Course</th><th>Status</th><th>Due Date</th><th>Countdown</th><th>Requirements</th><th>Actions</th></tr></thead>
+                    <thead class="sr-only"><tr><th>Course</th><th>Status</th><th>${deadlineHeader}</th><th>Countdown</th><th>Requirements</th><th>Actions</th></tr></thead>
                     <tbody class="divide-y divide-gray-200">
-                    ${apps.map(app => `
+                    ${apps.map(app => {
+                        const fromDate = app.deadlineFrom ? new Date(app.deadlineFrom + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : 'N/A';
+                        const untilDate = app.deadlineTo ? new Date(app.deadlineTo + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+                        const deadlineText = app.deadlineFrom && app.deadlineTo ? `${fromDate} - ${untilDate}` : (app.deadlineTo || 'N/A');
+                        
+                        return `
                         <tr class="bg-light-gray/50 hover:bg-light-gray">
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-text-dark w-1/4">${app.courseAppliedFor || ''}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${app.status || 'N/A'}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${app.dueDate ? new Date(app.dueDate + 'T00:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' }) : 'N/A'}</td>
-                            <td class="px-4 py-4 whitespace-nowrap text-sm ${getDaysRemaining(app.dueDate, app.status).colorClass}">${getDaysRemaining(app.dueDate, app.status).text}</td>
-                            <td class="px-6 py-4 text-sm text-text-light max-w-xs truncate" title="${app.requirements || ''}">${app.requirements || 'N/A'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-text-light">${deadlineText}</td>
+                            <td class="px-4 py-4 whitespace-nowrap text-sm ${getDaysRemaining(app.deadlineTo, app.status).colorClass}">${getDaysRemaining(app.deadlineTo, app.status).text}</td>
+                            <td class="px-6 py-4 text-sm text-text-light">
+                                <button class="font-semibold text-brand-blue hover:text-dark-blue transition-colors view-reqs-btn" data-id="${app.id}">View / Edit</button>
+                            </td>
                             <td class="px-6 py-4 text-right text-sm font-medium space-x-4">
                                 <button class="text-brand-blue hover:text-dark-blue font-semibold transition-colors edit-app-btn" data-id="${app.id}">Edit</button>
                                 <button class="text-red-600 hover:text-red-800 font-semibold transition-colors delete-app-btn" data-id="${app.id}">Delete</button>
                             </td>
                         </tr>
-                    `).join('')}
+                    `}).join('')}
                     </tbody>
                 `;
                 detailsCell.appendChild(nestedTable);
@@ -740,24 +814,16 @@
                     deleteApplication(e.target.dataset.id);
                 });
             });
+            // NEW: Listener for the requirements button
+            container.querySelectorAll('.view-reqs-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const app = currentApplications.find(a => a.id === e.target.dataset.id);
+                    if(app) openRequirementsModal(app);
+                });
+            });
         }
         
-        function renderPreparingList(applications) {
-            const preparingApps = applications.filter(app => app.status === 'Preparing');
-            preparingList.innerHTML = '';
-            if (preparingApps.length > 0) {
-                noPreparingText.style.display = 'none';
-                preparingApps.forEach(app => {
-                    const div = document.createElement('div');
-                    div.className = 'p-3 bg-light-gray rounded-lg flex justify-between items-center';
-                    div.innerHTML = `<span class="font-semibold text-text-dark">${app.uniName}</span><span class="text-sm text-text-light">${app.dueDate || ''}</span>`;
-                    preparingList.appendChild(div);
-                });
-            } else {
-                noPreparingText.style.display = 'block';
-            }
-        }
-
         function renderWishlist(items) {
             wishlistDiv.innerHTML = '';
             if (items.length > 0) {
@@ -834,9 +900,10 @@
             if (e.target === applicationModal) closeModal();
             if (e.target === confirmModal) closeConfirmModal();
             if (e.target === mergeConflictModal) closeMergeConflictModal();
+            if (e.target === requirementsModal) closeRequirementsModal(); // NEW
         });
         
-        // --- New File Import & Merge Functions ---
+        // --- File Import & Merge Functions ---
         
         function handleFileUpload(event) {
             const file = event.target.files[0];
@@ -892,7 +959,8 @@
                 container.innerHTML = `
                     <p><strong>Course:</strong> ${data.courseAppliedFor || 'N/A'}</p>
                     <p><strong>Status:</strong> ${data.status || 'N/A'}</p>
-                    <p><strong>Due Date:</strong> ${data.dueDate || 'N/A'}</p>
+                    <p><strong>Deadline From:</strong> ${data.deadlineFrom || 'N/A'}</p>
+                    <p><strong>Deadline To:</strong> ${data.deadlineTo || 'N/A'}</p>
                     <p><strong>Requirements:</strong> ${data.requirements || 'N/A'}</p>
                 `;
             }
@@ -917,11 +985,10 @@
             mergeConflictModal.style.display = 'block';
         }
 
-
         async function extractInfoWithGemini(text) {
             alertUser("AI is analyzing your document...", "info");
             
-            const prompt = `From the following text, extract the university name, course name, application deadline, and a summary of requirements. The keys should be "uniName", "courseAppliedFor", "dueDate", and "requirements". Format the deadline as<x_bin_660>-MM-dd. If info is missing, use an empty string. Text: \n\n${text}`;
+            const prompt = `From the following text, extract the university name, course name, application deadline start and end dates, and a summary of requirements. The keys must be "uniName", "courseAppliedFor", "deadlineFrom", "deadlineTo", and "requirements". Format ALL dates as YYYY-MM-DD. If a start or end date is not mentioned, use an empty string for that key. Text: \n\n${text}`;
             
             let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
             const payload = { 
@@ -933,15 +1000,16 @@
                         properties: {
                             "uniName": { "type": "STRING" },
                             "courseAppliedFor": { "type": "STRING" },
-                            "dueDate": { "type": "STRING", "description": "Date in<x_bin_660>-MM-dd format" },
+                            "deadlineFrom": { "type": "STRING", "description": "Date in YYYY-MM-DD format" },
+                            "deadlineTo": { "type": "STRING", "description": "Date in YYYY-MM-DD format" },
                             "requirements": { "type": "STRING" }
                         },
                     }
                 }
             };
 
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const apiKey = ""; // Add your Gemini API Key here
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -981,6 +1049,44 @@
                 hideLoading();
             }
         }
+
+        // --- NEW: Requirements Modal Functions ---
+
+        function openRequirementsModal(app) {
+            requirementsModalTitle.textContent = `Requirements for ${app.courseAppliedFor}`;
+            requirementsModalInfo.textContent = `at ${app.uniName}`;
+            requirementsAppId.value = app.id;
+            requirementsText.value = app.requirements || '';
+            requirementsModal.style.display = 'block';
+            requirementsText.focus();
+        }
+
+        function closeRequirementsModal() {
+            requirementsModal.style.display = 'none';
+        }
+
+        requirementsForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            showLoading();
+            const id = requirementsAppId.value;
+            const newRequirements = requirementsText.value.trim();
+
+            try {
+                await updateDoc(doc(applicationsCollectionRef, id), {
+                    requirements: newRequirements
+                });
+                alertUser("Requirements updated successfully!", "success");
+                closeRequirementsModal();
+            } catch(error) {
+                alertUser("Failed to save requirements.", "error");
+                console.error("Error updating requirements: ", error);
+            } finally {
+                hideLoading();
+            }
+        });
+        
+        closeRequirementsModalBtn.addEventListener('click', closeRequirementsModal);
+        cancelRequirementsBtn.addEventListener('click', closeRequirementsModal);
 
     </script>
 </body>
