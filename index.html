@@ -382,7 +382,6 @@
         import { getFirestore, doc, collection, addDoc, setDoc, deleteDoc, onSnapshot, query, serverTimestamp, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
-            // Your Firebase config remains here
             apiKey: "AIzaSyDmAlSmn_dvqJ93HJTVQcsf09Iihrj8DxM",
             authDomain: "my-uni-tracker.firebaseapp.com",
             projectId: "my-uni-tracker",
@@ -530,14 +529,18 @@
             showLoading();
             const qApps = query(applicationsCollectionRef, orderBy("uniName", "asc"), orderBy("courseAppliedFor", "asc"));
             unsubscribeApplications = onSnapshot(qApps, (querySnapshot) => {
-                currentApplications = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                renderAllApplicationSections(currentApplications);
-                hideLoading();
+                try {
+                    currentApplications = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    renderAllApplicationSections(currentApplications);
+                } catch (e) {
+                    console.error("Render Error:", e);
+                    alertUser("A critical error occurred while displaying your applications.", "error");
+                } finally {
+                    hideLoading();
+                }
             }, (error) => {
                 console.error("Firestore snapshot error (Applications): ", error);
-                if (error.code.includes('failed-precondition')) {
-                     alertUser("Missing Firestore index. Please create one in Firebase.", "error");
-                } else { alertUser(`Error fetching applications: ${error.message}`, "error"); }
+                alertUser(`Error fetching applications: ${error.message}`, "error");
                 hideLoading();
             });
 
@@ -696,7 +699,7 @@
             };
 
             const fromDate = parseDate(deadlineFromString);
-            const toDate = parseDate(deadlineTo**String**); // CORRECTED TYPO HERE
+            const toDate = parseDate(deadlineTo**String**);
 
             if (fromDate && today < fromDate) {
                 const diffTime = fromDate.getTime() - today.getTime();
