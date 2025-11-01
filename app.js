@@ -1,4 +1,3 @@
- <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-auth.js";
     import { getFirestore, doc, collection, addDoc, setDoc, deleteDoc, onSnapshot, query, serverTimestamp, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-firestore.js";
@@ -956,4 +955,3 @@ function dayDiff(a, b) {
 
     closeRequirementsModalBtn.addEventListener("click", closeRequirementsModal);
     cancelRequirementsBtn.addEventListener("click", closeRequirementsModal);
-  </script>
