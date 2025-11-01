@@ -33,6 +33,17 @@ const observer = new IntersectionObserver(
 );
 document.querySelectorAll(".fade-in-section").forEach((s) => observer.observe(s));
 
+// ---- initial-load readiness flags ----
+let authResolved = false;
+let appsReady = false;
+let wishlistReady = false;
+
+function maybeHideInitialLoading() {
+  console.log("Loading flags:", { authResolved, appsReady, wishlistReady });
+  if (authResolved && appsReady && wishlistReady) hideLoading();
+}
+
+
 // ---------- AUTH BUTTONS ----------
 function mapAuthError(code) {
   switch (code) {
@@ -169,23 +180,56 @@ el.wishlistForm.addEventListener("submit", async (e) => {
 // ---------- AUTH STATE ----------
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    // show UI
     setUser(user.uid);
     el.loginPage.style.display = "none";
     el.mainHeader.style.display = "block";
     el.mainContent.style.display = "block";
     document.querySelectorAll(".userEmailDisplay").forEach((d) => (d.textContent = user.email));
+
+    // collections + listeners
     initUserCollections(user.uid, appId);
-    listenApplications();
-    listenWishlist();
+
+    // mark auth resolved and attach listeners that notify when the *first* snapshot arrives
+    authResolved = true;
+    maybeHideInitialLoading();
+
+    listenApplications(() => {
+      appsReady = true;
+      maybeHideInitialLoading();
+    });
+
+    listenWishlist(() => {
+      wishlistReady = true;
+      maybeHideInitialLoading();
+    });
+
+    // safety net (never spin forever)
+    setTimeout(() => {
+      if (el.loadingSpinner && el.loadingSpinner.style.display !== "none") {
+        console.warn("⏰ Forcing spinner hide after 10s timeout.");
+        hideLoading();
+      }
+    }, 10000);
+
     handleInitialTab();
   } else {
+    // clean up
     if (unsub.apps) unsub.apps();
     if (unsub.wishlist) unsub.wishlist();
+
     el.loginPage.style.display = "flex";
     el.mainHeader.style.display = "none";
     el.mainContent.style.display = "none";
+
+    // login screen is now visible; loader should not persist
+    authResolved = true;
+    appsReady = true;
+    wishlistReady = true;
+    hideLoading();
   }
 });
+
 
 // ---------- BACKUP: expose render in console (debug) ----------
 window.__render = renderAllApplicationSections;
