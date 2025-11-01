@@ -377,6 +377,27 @@
     const cancelRequirementsBtn = document.getElementById("cancelRequirementsBtn");
     const saveRequirementsBtn = document.getElementById("saveRequirementsBtn");
 
+    // --- Date helpers (local, calendar-day safe) ---
+function parseYMDLocal(s) {
+  // "YYYY-MM-DD" -> Date at local midnight (no timezone shift)
+  if (!s) return null;
+  const [y, m, d] = s.split("-").map(Number);
+  if (!y || !m || !d) return null;
+  return new Date(y, m - 1, d); // local midnight
+}
+
+function startOfTodayLocal() {
+  const t = new Date();
+  return new Date(t.getFullYear(), t.getMonth(), t.getDate()); // local midnight
+}
+
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+// Difference in **calendar** days (local), i.e. 0 = today, 1 = tomorrow, -1 = yesterday
+function dayDiff(a, b) {
+  return Math.floor((a.getTime() - b.getTime()) / MS_PER_DAY);
+}
+
     function showLoginPage() {
       loginPage.style.display = "flex";
       mainHeader.style.display = "none";
@@ -634,39 +655,39 @@
     }
 
     function getDaysRemaining(deadlineFromString, deadlineToString, status) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-   if (["Accepted", "Rejected", "Waitlisted"].includes(status)) {
-  return { text: "Decided", colorClass: "text-text-light" };
-}
-      const parseDate = (dateString) => {
-        if (!dateString) return null;
-        const parts = dateString.split("-");
-        if (parts.length !== 3) return null;
-        return new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
+  // "Decided" statuses: don't show countdowns
+  if (["Accepted", "Rejected", "Waitlisted"].includes(status)) {
+    return { text: "Decided", colorClass: "text-text-light" };
+  }
+
+  const today = startOfTodayLocal();
+  const fromDate = parseYMDLocal(deadlineFromString);
+  const toDate = parseYMDLocal(deadlineToString);
+
+  // Upcoming window not started yet
+  if (fromDate && today < fromDate) {
+    const d = dayDiff(fromDate, today); // >= 1
+    if (d === 0) return { text: "Starts Today!", colorClass: "text-green-700 font-bold" };
+    if (d === 1) return { text: "Starts in 1 day", colorClass: "text-green-600 font-semibold" };
+    return { text: `Starts in ${d} days`, colorClass: "text-green-600 font-semibold" };
+  }
+
+  // Active / ending side
+  if (toDate) {
+    const d = dayDiff(toDate, today); // 0 today, >0 future, <0 past
+    if (d < 0) {
+      return {
+        text: status === "Not Applied" ? "Deadline Passed" : `Overdue by ${Math.abs(d)} days`,
+        colorClass: "text-brand-red font-semibold",
       };
-      const fromDate = parseDate(deadlineFromString);
-      const toDate = parseDate(deadlineToString);
-      if (fromDate && today < fromDate) {
-        const diffTime = fromDate.getTime() - today.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays === 1) return { text: `Starts in 1 day`, colorClass: "text-green-600 font-semibold" };
-        return { text: `Starts in ${diffDays} days`, colorClass: "text-green-600 font-semibold" };
-      }
-      if (toDate) {
-        const diffTime = toDate.getTime() - today.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays < 0) {
-          return { text: status === "Not Applied" ? "Deadline Passed" : `Overdue by ${Math.abs(diffDays)} days`, colorClass: "text-brand-red font-semibold" };
-        }
-        if (diffDays === 0) {
-          return { text: "Ends Today!", colorClass: "text-brand-red font-bold" };
-        }
-        if (diffDays === 1) return { text: `Ends in 1 day`, colorClass: "text-red-500 font-semibold" };
-        return { text: `Ends in ${diffDays} days`, colorClass: "text-red-500 font-semibold" };
-      }
-      return { text: "N/A", colorClass: "text-text-light" };
     }
+    if (d === 0) return { text: "Ends Today!", colorClass: "text-brand-red font-bold" };
+    if (d === 1) return { text: "Ends in 1 day", colorClass: "text-red-500 font-semibold" };
+    return { text: `Ends in ${d} days`, colorClass: "text-red-500 font-semibold" };
+  }
+
+  return { text: "N/A", colorClass: "text-text-light" };
+}
 
     // ==========================
     // NEW: Section counts + layout
@@ -731,46 +752,60 @@
       renderTableSection(decidedTableContainer, notAppliedApps, { sortByDeadline: false, decided: false });
     }
 
-    function getGroupDeadlineStatus(apps, opts = {}) {
-      const { decided = false } = opts;
-      if (decided) {
-        return { sortOrder: 3, sortDate: null, text: "Decided", colorClass: "text-text-light" };
-      }
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      let earliestActiveEnd = null;
-      let earliestUpcomingStart = null;
-      const parseDate = (dateString) => {
-        if (!dateString) return null;
-        const parts = dateString.split("-");
-        if (parts.length !== 3) return null;
-        return new Date(Date.UTC(parts[0], parts[1] - 1, parts[2]));
-      };
-      for (const app of apps) {
-        if (["Applied", "Accepted", "Rejected", "Waitlisted"].includes(app.status)) continue;
-        const fromDate = parseDate(app.deadlineFrom);
-        const toDate = parseDate(app.deadlineTo);
-        if (fromDate && today < fromDate) {
-          if (!earliestUpcomingStart || fromDate < earliestUpcomingStart) earliestUpcomingStart = fromDate;
-        } else if (toDate && today <= toDate) {
-          if (!earliestActiveEnd || toDate < earliestActiveEnd) earliestActiveEnd = toDate;
-        }
-      }
-      if (earliestActiveEnd) {
-        const diffTime = earliestActiveEnd.getTime() - today.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays === 0) return { sortOrder: 1, sortDate: earliestActiveEnd, text: "Ends Today!", colorClass: "text-brand-red font-bold" };
-        if (diffDays === 1) return { sortOrder: 1, sortDate: earliestActiveEnd, text: "Ends in 1 day", colorClass: "text-red-500 font-semibold" };
-        return { sortOrder: 1, sortDate: earliestActiveEnd, text: `Ends in ${diffDays} days`, colorClass: "text-red-500 font-semibold" };
-      }
-      if (earliestUpcomingStart) {
-        const diffTime = earliestUpcomingStart.getTime() - today.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        if (diffDays === 1) return { sortOrder: 2, sortDate: earliestUpcomingStart, text: "Starts in 1 day", colorClass: "text-green-600 font-semibold" };
-        return { sortOrder: 2, sortDate: earliestUpcomingStart, text: `Starts in ${diffDays} days`, colorClass: "text-green-600 font-semibold" };
-      }
-      return { sortOrder: 3, sortDate: null, text: "N/A", colorClass: "text-text-light" };
+  function getGroupDeadlineStatus(apps, opts = {}) {
+  const { decided = false } = opts;
+  if (decided) {
+    return { sortOrder: 3, sortDate: null, text: "Decided", colorClass: "text-text-light" };
+  }
+
+  const today = startOfTodayLocal();
+  let earliestActiveEnd = null;
+  let earliestUpcomingStart = null;
+
+  for (const app of apps) {
+    // Ignore decided apps within a group for "next deadline" calc
+    if (["Accepted", "Rejected", "Waitlisted"].includes(app.status)) continue;
+
+    const fromDate = parseYMDLocal(app.deadlineFrom);
+    const toDate = parseYMDLocal(app.deadlineTo);
+
+    // Upcoming window (has a start date in the future)
+    if (fromDate && today < fromDate) {
+      if (!earliestUpcomingStart || fromDate < earliestUpcomingStart) earliestUpcomingStart = fromDate;
+      continue;
     }
+
+    // Active window (today within [from,to] or only toDate in the future)
+    if (toDate && today <= toDate) {
+      if (!earliestActiveEnd || toDate < earliestActiveEnd) earliestActiveEnd = toDate;
+    }
+  }
+
+  if (earliestActiveEnd) {
+    const d = dayDiff(earliestActiveEnd, today);
+    if (d === 0) {
+      // Make "Ends Today!" sort to the very top
+      return { sortOrder: 0, sortDate: today, text: "Ends Today!", colorClass: "text-brand-red font-bold" };
+    }
+    if (d === 1) {
+      return { sortOrder: 1, sortDate: earliestActiveEnd, text: "Ends in 1 day", colorClass: "text-red-500 font-semibold" };
+    }
+    return { sortOrder: 1, sortDate: earliestActiveEnd, text: `Ends in ${d} days`, colorClass: "text-red-500 font-semibold" };
+  }
+
+  if (earliestUpcomingStart) {
+    const d = dayDiff(earliestUpcomingStart, today);
+    if (d === 0) {
+      return { sortOrder: 2, sortDate: earliestUpcomingStart, text: "Starts Today!", colorClass: "text-green-700 font-bold" };
+    }
+    if (d === 1) {
+      return { sortOrder: 2, sortDate: earliestUpcomingStart, text: "Starts in 1 day", colorClass: "text-green-600 font-semibold" };
+    }
+    return { sortOrder: 2, sortDate: earliestUpcomingStart, text: `Starts in ${d} days`, colorClass: "text-green-600 font-semibold" };
+  }
+
+  return { sortOrder: 3, sortDate: null, text: "N/A", colorClass: "text-text-light" };
+}
 
     function renderTableSection(container, applications, opts = {}) {
       const { sortByDeadline = false, decided = false } = opts;
@@ -1224,4 +1259,5 @@
   </script>
 </body>
 </html>
+
 
