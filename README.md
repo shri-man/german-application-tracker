@@ -1,6 +1,6 @@
 # 🎓 UniTrack — German University Application Tracker
 
-**Live Demo:** [🔗 UniTrack on GitHub Pages](https://shri-man.github.io/german-application-tracker)  
+**Live Demo:** [🔗 UniTrack on GitHub Pages](https://shri-man.github.io/UniTrack/)  
 **Tech Stack:** `HTML5` · `Tailwind CSS` · `JavaScript (ES Modules)` · `Firebase (Auth & Firestore)` · `SheetJS (XLSX)` · `docx-preview`
 
 ---
