@@ -822,7 +822,7 @@ const notAppliedCount = document.getElementById('notAppliedCount');
             return { sortOrder: 3, sortDate: null, text: 'N/A', colorClass: 'text-text-light' };
         }
         
-        function renderTableSection(container, applications) {
+       function renderTableSection(container, applications) {
             container.innerHTML = '';
             
             const groupedApps = applications.reduce((acc, app) => {
@@ -838,21 +838,30 @@ const notAppliedCount = document.getElementById('notAppliedCount');
             }
 
             let sortedUniGroups;
+            const isDecidedSection = container.id === 'decidedTableContainer';
             const uniGroupsArray = Object.entries(groupedApps).map(([uniName, apps]) => ({ uniName, apps }));
 
-           let sortedUniGroups = uniGroupsArray.map(group => ({
-    ...group,
-    deadlineStatus: getGroupDeadlineStatus(group.apps)
-}));
-sortedUniGroups.sort((a, b) => {
-    if (a.deadlineStatus.sortOrder !== b.deadlineStatus.sortOrder) {
-        return a.deadlineStatus.sortOrder - b.deadlineStatus.sortOrder;
-    }
-    if (a.deadlineStatus.sortDate && b.deadlineStatus.sortDate) {
-        return a.deadlineStatus.sortDate - b.deadlineStatus.sortDate;
-    }
-    return a.uniName.localeCompare(b.uniName);
-});
+            if (isDecidedSection) {
+                uniGroupsArray.sort((a, b) => a.uniName.localeCompare(b.uniName));
+                sortedUniGroups = uniGroupsArray.map(group => ({
+                    ...group,
+                    deadlineStatus: { text: 'Decided', colorClass: 'text-text-light' }
+                }));
+            } else {
+                sortedUniGroups = uniGroupsArray.map(group => ({
+                    ...group,
+                    deadlineStatus: getGroupDeadlineStatus(group.apps)
+                }));
+                sortedUniGroups.sort((a, b) => {
+                    if (a.deadlineStatus.sortOrder !== b.deadlineStatus.sortOrder) {
+                        return a.deadlineStatus.sortOrder - b.deadlineStatus.sortOrder;
+                    }
+                    if (a.deadlineStatus.sortDate && b.deadlineStatus.sortDate) {
+                        return a.deadlineStatus.sortDate - b.deadlineStatus.sortDate;
+                    }
+                    return a.uniName.localeCompare(b.uniName);
+                });
+            }
 
             const table = document.createElement('table');
             table.className = 'min-w-full';
@@ -1225,4 +1234,5 @@ sortedUniGroups.sort((a, b) => {
     </script>
 </body>
 </html>
+
 
