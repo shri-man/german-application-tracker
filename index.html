@@ -202,49 +202,81 @@
             </div>
         </section>
 
-        <section id="applications" class="tab-content bg-white min-h-screen py-24">
-            <div class="container mx-auto px-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10">
-                    <div>
-                        <h2 class="text-4xl md:text-5xl font-black text-text-dark tracking-tighter">My Applications</h2>
-                        <p class="text-text-light mt-2">Logged in as <span class="userEmailDisplay font-semibold text-brand-blue"></span></p>
-                    </div>
-                    <div class="flex items-center gap-4 mt-6 sm:mt-0">
-                         <button id="importBtn" class="bg-gray-100 text-text-dark font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center space-x-2">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                             <span>Import</span>
-                         </button>
-                         <button id="downloadExcelBtn" class="bg-gray-100 text-text-dark font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center space-x-2">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                              <span>Download</span>
-                         </button>
-                        <button id="addApplicationBtn" class="bg-black text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-300 flex items-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            <span>Add Application</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="space-y-12">
-                    <section id="preparingSection">
-                        <h3 class="text-2xl font-bold text-text-dark mb-4 border-b pb-2">Preparing</h3>
-                        <div id="preparingTableContainer" class="bg-white rounded-xl overflow-x-auto">
-                            </div>
-                    </section>
-
-                    <section id="pendingSection">
-                        <h3 class="text-2xl font-bold text-text-dark mb-4 border-b pb-2">Applied / Not Applied</h3>
-                        <div id="pendingTableContainer" class="bg-white rounded-xl overflow-x-auto">
-                            </div>
-                    </section>
-
-                    <section id="decidedSection">
-                        <h3 class="text-2xl font-bold text-text-dark mb-4 border-b pb-2">Accepted / Rejected</h3>
-                        <div id="decidedTableContainer" class="bg-white rounded-xl overflow-x-auto">
-                            </div>
-                    </section>
-                </div>
-            </div>
-        </section>
+       <section id="applications" class="tab-content bg-white min-h-screen py-24">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10">
+                    <div>
+                        <h2 class="text-4xl md:text-5xl font-black text-text-dark tracking-tighter">My Applications</h2>
+                        <p class="text-text-light mt-2">Logged in as <span class="userEmailDisplay font-semibold text-brand-blue"></span></p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-6 sm:mt-0">
+                         <button id="importBtn" class="bg-gray-100 text-text-dark font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center space-x-2">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                             <span>Import</span>
+                         </button>
+                         <button id="downloadExcelBtn" class="bg-gray-100 text-text-dark font-semibold py-3 px-6 rounded-lg hover:bg-gray-200 transition-colors duration-300 flex items-center space-x-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          _2" x2="12" y2="3"/></svg>
+                              <span>Download</span>
+                         </button>
+                        <button id="addApplicationBtn" class="bg-black text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-300 flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            <span>Add Application</span>
+                        </button>
+                    </div>
+                </div>
+                
+                                <div class="space-y-12">
+                    <section id="preparingSection">
+                        <h3 class="text-2xl font-bold text-text-dark mb-4 border-b pb-2">
+                            Preparing <span id="preparingCount" class="text-text-light font-medium text-xl"></span>
+                        </h3>
+                        <div id="preparingTableContainer" class="bg-white rounded-xl overflow-x-auto">
+                        </div>
+                    </section>
+    
+                                        <section id="appliedParentSection" class="space-y-10 p-6 bg-light-gray rounded-xl">
+                        <h3 class="text-2xl font-bold text-text-dark pb-2">
+                            Applied <span id="appliedTotalCount" class="text-text-light font-medium text-xl"></span>
+                        </h3>
+                        
+                                                <section id="appliedPendingSection">
+                            <h4 class="text-xl font-semibold text-brand-blue mb-4 pb-2">
+                                Pending Review <span id="appliedPendingCount" class="text-text-light font-medium text-lg"></span>
+                            </h4>
+                            <div id="appliedPendingTableContainer" class="bg-white rounded-xl overflow-x-auto"></div>
+                        </section>
+                        
+                              _Accepted -->
+                        <section id="appliedAcceptedSection">
+                            <h4 class="text-xl font-semibold text-green-600 mb-4 pb-2">
+                                Accepted <span id="acceptedCount" class="text-text-light font-medium text-lg"></span>
+                _Accepted <span id="acceptedCount" class="text-text-light font-medium text-lg"></span>
+                            </h4>
+                            <div id="acceptedTableContainer" class="bg-white rounded-xl overflow-x-auto"></div>
+                        </section>
+    
+                                                <section id="appliedRejectedSection">
+                            <h4 class="text-xl font-semibold text-brand-red mb-4 pb-2">
+                                Rejected <span id="rejectedCount" class="text-text-light font-medium text-lg"></span>
+                            </h4>
+                            <div id="rejectedTableContainer" class="bg-white rounded-xl overflow-x-auto"></div>
+                  _xl overflow-x-auto"></div>
+                        </section>
+                    </section>
+    
+                    <section id="notAppliedSection">
+                        <h3 class="text-2xl font-bold text-text-dark mb-4 border-b pb-2">
+                            Not Applied <span id="notAppliedCount" class="text-text-light font-medium text-xl"></span>
+s="text-text-light font-medium text-xl"></span>
+                        </h3>
+                        <div id="notAppliedTableContainer" class="bg-white rounded-xl overflow-x-auto">
+                        </div>
+                    </section>
+                </div>
+                                
+            </div>
+        </section>
     </main>
     
     <input type="file" id="fileInput" class="hidden" accept=".xlsx, .docx">
@@ -420,10 +452,20 @@
         const wishlistForm = document.getElementById('wishlistForm');
         const wishlistInput = document.getElementById('wishlistInput');
         const noWishlistText = document.getElementById('noWishlistText');
-        
-        const preparingTableContainer = document.getElementById('preparingTableContainer');
-        const decidedTableContainer = document.getElementById('decidedTableContainer');
-        const pendingTableContainer = document.getElementById('pendingTableContainer');
+
+// MODIFIED: Table container and count variables
+const preparingTableContainer = document.getElementById('preparingTableContainer');
+const appliedPendingTableContainer = document.getElementById('appliedPendingTableContainer');
+const acceptedTableContainer = document.getElementById('acceptedTableContainer');
+const rejectedTableContainer = document.getElementById('rejectedTableContainer');
+const notAppliedTableContainer = document.getElementById('notAppliedTableContainer');
+
+const preparingCount = document.getElementById('preparingCount');
+const appliedTotalCount = document.getElementById('appliedTotalCount');
+const appliedPendingCount = document.getElementById('appliedPendingCount');
+const acceptedCount = document.getElementById('acceptedCount');
+const rejectedCount = document.getElementById('rejectedCount');
+const notAppliedCount = document.getElementById('notAppliedCount');
 
         // Requirements Modal Elements
         const requirementsModal = document.getElementById('requirementsModal');
@@ -706,14 +748,30 @@
         }
         
         function renderAllApplicationSections(applications) {
-            const preparingApps = applications.filter(app => app.status === 'Preparing');
-            const decidedApps = applications.filter(app => ['Accepted', 'Rejected', 'Waitlisted'].includes(app.status));
-            const pendingApps = applications.filter(app => ['Applied', 'Not Applied'].includes(app.status));
+            // 1. Filter into new categories
+            const preparingApps = applications.filter(app => app.status === 'Preparing');
+            const appliedPendingApps = applications.filter(app => app.status === 'Applied');
+            const acceptedApps = applications.filter(app => ['Accepted', 'Waitlisted'].includes(app.status));
+            const rejectedApps = applications.filter(app => app.status === 'Rejected');
+            const notAppliedApps = applications.filter(app => app.status === 'Not Applied');
 
-            renderTableSection(preparingTableContainer, preparingApps);
-            renderTableSection(decidedTableContainer, decidedApps);
-            renderTableSection(pendingTableContainer, pendingApps);
-        }
+            // 2. Update counts in headings
+            preparingCount.textContent = `(${preparingApps.length})`;
+            appliedPendingCount.textContent = `(${appliedPendingApps.length})`;
+            acceptedCount.textContent = `(${acceptedApps.length})`;
+            rejectedCount.textContent = `(${rejectedApps.length})`;
+            notAppliedCount.textContent = `(${notAppliedApps.length})`;
+            
+            const appliedTotal = appliedPendingApps.length + acceptedApps.length + rejectedApps.length;
+            appliedTotalCount.textContent = `(Total: ${appliedTotal})`;
+
+            // 3. Render the tables for each section
+            renderTableSection(preparingTableContainer, preparingApps);
+            renderTableSection(appliedPendingTableContainer, appliedPendingApps);
+            renderTableSection(acceptedTableContainer, acceptedApps);
+            renderTableSection(rejectedTableContainer, rejectedApps);
+            renderTableSection(notAppliedTableContainer, notAppliedApps);
+        }
 
         function getGroupDeadlineStatus(apps) {
             const today = new Date();
@@ -780,30 +838,21 @@
             }
 
             let sortedUniGroups;
-            const isDecidedSection = container.id === 'decidedTableContainer';
             const uniGroupsArray = Object.entries(groupedApps).map(([uniName, apps]) => ({ uniName, apps }));
 
-            if (isDecidedSection) {
-                uniGroupsArray.sort((a, b) => a.uniName.localeCompare(b.uniName));
-                sortedUniGroups = uniGroupsArray.map(group => ({
-                    ...group,
-                    deadlineStatus: { text: 'Decided', colorClass: 'text-text-light' }
-                }));
-            } else {
-                sortedUniGroups = uniGroupsArray.map(group => ({
-                    ...group,
-                    deadlineStatus: getGroupDeadlineStatus(group.apps)
-                }));
-                sortedUniGroups.sort((a, b) => {
-                    if (a.deadlineStatus.sortOrder !== b.deadlineStatus.sortOrder) {
-                        return a.deadlineStatus.sortOrder - b.deadlineStatus.sortOrder;
-                    }
-                    if (a.deadlineStatus.sortDate && b.deadlineStatus.sortDate) {
-                        return a.deadlineStatus.sortDate - b.deadlineStatus.sortDate;
-                    }
-                    return a.uniName.localeCompare(b.uniName);
-                });
-            }
+           let sortedUniGroups = uniGroupsArray.map(group => ({
+    ...group,
+    deadlineStatus: getGroupDeadlineStatus(group.apps)
+}));
+sortedUniGroups.sort((a, b) => {
+    if (a.deadlineStatus.sortOrder !== b.deadlineStatus.sortOrder) {
+        return a.deadlineStatus.sortOrder - b.deadlineStatus.sortOrder;
+    }
+    if (a.deadlineStatus.sortDate && b.deadlineStatus.sortDate) {
+        return a.deadlineStatus.sortDate - b.deadlineStatus.sortDate;
+    }
+    return a.uniName.localeCompare(b.uniName);
+});
 
             const table = document.createElement('table');
             table.className = 'min-w-full';
@@ -1176,3 +1225,4 @@
     </script>
 </body>
 </html>
+
